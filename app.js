@@ -386,7 +386,7 @@
       const category=categoryInput.value,action=event.submitter?.dataset.action||'publish';
       const payload={category,revision:editorState[category].revision,id:choiceInput.value||undefined,action,post:{title:document.getElementById('post-title').value,body:document.getElementById('post-body').value,date:document.getElementById('post-date').value,pinned:document.getElementById('post-pinned').checked}};
       editorLock(true);feedback(editorFeedback,'저장하고 있습니다.');
-      try{const saved=await request('/api/post-save',payload);editorState[category]=saved;fillEditor(saved.id);renderPortal(await request('/api/portal'));feedback(editorFeedback,action==='draft'?'초안을 저장했습니다. 회원에게는 게시되지 않습니다.':action==='unpublish'?'게시를 내렸습니다. 글은 초안으로 보관됩니다.':'게시했습니다. 회원 홈페이지에 반영되었습니다.',true);}
+      try{const saved=await request('/api/post-save',payload);editorState=saved;categoryInput.value=saved.category;fillEditor(saved.id);renderPortal(await request('/api/portal'));feedback(editorFeedback,action==='draft'?'초안을 저장했습니다. 회원에게는 게시되지 않습니다.':action==='unpublish'?'라운지와 홈페이지에서 게시를 내렸습니다.':'라운지와 홈페이지에 게시했습니다.',true);}
       catch(error){feedback(editorFeedback,error.message);}
       finally{editorLock(false);}
     });

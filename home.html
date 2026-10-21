@@ -53,7 +53,8 @@
       <dialog id="post-editor" class="post-editor" aria-labelledby="post-editor-title">
         <div class="dialog-heading"><h2 id="post-editor-title">글 작성·수정</h2><button id="post-editor-close" type="button" class="icon-button" aria-label="편집창 닫기">×</button></div>
         <form id="post-editor-form" method="post">
-          <div class="editor-row"><label>게시판<select id="post-category"><option value="notices">공지사항</option><option value="patchnotes">패치노트</option></select></label><label>저장된 글<select id="post-choice"><option value="">새 글 작성</option></select></label></div>
+          <p class="form-note">라운지와 같은 공지를 관리합니다. 제목에 패치·업데이트 또는 REAL 버전을 넣으면 패치노트에 자동 분류됩니다.</p>
+          <div class="editor-row"><label>글 목록<select id="post-category"><option value="notices">공지사항</option><option value="patchnotes">패치노트</option></select></label><label>저장된 글<select id="post-choice"><option value="">새 글 작성</option></select></label></div>
           <label>제목<input id="post-title" type="text" maxlength="160" required></label>
           <div class="editor-row"><label>표시 날짜<input id="post-date" type="date" required></label><label class="editor-pin"><input id="post-pinned" type="checkbox">상단 고정</label></div>
           <label>본문<textarea id="post-body" rows="12" maxlength="12000" required></textarea></label>
