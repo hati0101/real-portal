@@ -230,6 +230,14 @@
     const logout = document.getElementById('logout-button');
     const content = document.getElementById('portal-content');
     const notices = document.getElementById('notice-list');
+    const patchNotes = document.getElementById('patchnotes');
+    const writeButton = document.getElementById('post-write-button');
+    const editor = document.getElementById('post-editor');
+    const editorForm = document.getElementById('post-editor-form');
+    const categoryInput = document.getElementById('post-category');
+    const choiceInput = document.getElementById('post-choice');
+    const editorFeedback = document.getElementById('post-feedback');
+    let selectedBoard = 'notices', editorState = null, editorBusy = false;
     const downloadLink = document.getElementById('download-link');
     const adminControls = document.getElementById('admin-controls');
     const registrationSwitch = document.getElementById('registration-switch');
@@ -241,25 +249,27 @@
     function clearPortal() {
       content.hidden = true;
       notices.replaceChildren();
+      patchNotes.replaceChildren();
+      writeButton.hidden = true;
       downloadLink.removeAttribute('href');
       document.getElementById('download-filename').textContent = '';
       document.getElementById('download-size').textContent = '';
     }
 
-    function renderPortal(portal) {
-      if (!Array.isArray(portal.notices) || !portal.download || typeof portal.download.url !== 'string') throw new Error('홈페이지 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
-      const downloadUrl = new URL(portal.download.url);
-      if (downloadUrl.protocol !== 'https:' || downloadUrl.username || downloadUrl.password) throw new Error('다운로드 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.');
-      clearPortal();
-      for (const notice of portal.notices) {
+    function renderPosts(list, posts, category) {
+      list.replaceChildren();
+      const ordered = [...posts].sort((a,b) => Number(b.pinned)-Number(a.pinned)||b.date.localeCompare(a.date)||b.title.localeCompare(a.title,'ko',{numeric:true}));
+      for (const [index, notice] of ordered.entries()) {
         if (!notice || typeof notice.title !== 'string' || typeof notice.body !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(notice.date)) continue;
-        const article = document.createElement('article');
+        const article = document.createElement('details');
         article.className = 'notice';
+        article.open = index === 0;
+        const summary = document.createElement('summary');
         const meta = document.createElement('div');
         meta.className = 'notice-meta';
         const tag = document.createElement('span');
         tag.className = 'notice-tag';
-        tag.textContent = '안내';
+        tag.textContent = notice.pinned ? '고정' : category === 'patchnotes' ? '패치노트' : '안내';
         const time = document.createElement('time');
         time.dateTime = notice.date;
         time.textContent = notice.date.replaceAll('-', '.');
@@ -273,15 +283,28 @@
           text.textContent = paragraph;
           body.append(text);
         }
-        article.append(meta, title, body);
-        notices.append(article);
+        summary.append(meta,title);
+        article.append(summary,body);
+        if(isAdmin && notice.id){const edit=document.createElement('button');edit.type='button';edit.className='text-button post-edit';edit.textContent='수정';edit.addEventListener('click',()=>openEditor(category,notice.id));article.append(edit);}
+        list.append(article);
       }
-      if (!notices.childElementCount) {
+      if (!list.childElementCount) {
         const empty = document.createElement('p');
         empty.className = 'notice-body';
-        empty.textContent = '등록된 공지가 없습니다.';
-        notices.append(empty);
+        empty.textContent = category === 'patchnotes' ? '등록된 패치노트가 없습니다.' : '등록된 공지가 없습니다.';
+        list.append(empty);
       }
+    }
+
+    function renderPortal(portal) {
+      if (!Array.isArray(portal.notices) || !portal.download || typeof portal.download.url !== 'string') throw new Error('홈페이지 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      const downloadUrl = new URL(portal.download.url);
+      if (downloadUrl.protocol !== 'https:' || downloadUrl.username || downloadUrl.password) throw new Error('다운로드 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      clearPortal();
+      renderPosts(notices,portal.notices,'notices');
+      renderPosts(patchNotes,Array.isArray(portal.patchNotes)?portal.patchNotes:[],'patchnotes');
+      document.getElementById('account-name').textContent = typeof portal.profile?.nickname === 'string' ? portal.profile.nickname : '회원';
+      writeButton.hidden = !isAdmin;
       downloadLink.href = downloadUrl.href;
       document.getElementById('download-filename').textContent = typeof portal.download.fileName === 'string' ? portal.download.fileName : '클라이언트 설치 파일';
       document.getElementById('download-size').textContent = typeof portal.download.sizeLabel === 'string' ? portal.download.sizeLabel : '';
@@ -302,8 +325,8 @@
           location.replace('./index.html');
           return;
         }
-        if (typeof session.user?.userid === 'string') document.getElementById('account-name').textContent = session.user.userid;
         logout.disabled = false;
+        isAdmin = session.user?.isAdmin === true;
         const portal = await request('/api/portal');
         renderPortal(portal);
         apiStatus.hidden = true;
@@ -325,6 +348,48 @@
         else feedback(output, error.message);
       }
     }
+
+    function selectBoard(category, focus=false) {
+      selectedBoard = category;
+      notices.hidden = category !== 'notices';patchNotes.hidden = category !== 'patchnotes';
+      for(const tab of document.querySelectorAll('.board-tabs [role="tab"]')){const active=tab.dataset.board===category;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;if(active&&focus)tab.focus();}
+    }
+    for(const button of document.querySelectorAll('[data-board]'))button.addEventListener('click',()=>selectBoard(button.dataset.board));
+    document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();selectBoard(event.key==='Home'?'notices':event.key==='End'?'patchnotes':selectedBoard==='notices'?'patchnotes':'notices',true);}});
+    function editorLock(busy){editorBusy=busy;for(const control of editorForm.elements)control.disabled=busy;editorForm.setAttribute('aria-busy',String(busy));}
+    function fillEditor(id=''){
+      const posts=editorState[categoryInput.value].posts;
+      choiceInput.replaceChildren(new Option('새 글 작성',''));
+      for(const post of [...posts].sort((a,b)=>b.draft.date.localeCompare(a.draft.date))){choiceInput.add(new Option((post.published?'':'[초안] ')+post.draft.title,post.id));}
+      choiceInput.value=posts.some(p=>p.id===id)?id:'';
+      const post=posts.find(p=>p.id===choiceInput.value);
+      document.getElementById('post-title').value=post?.draft.title||'';
+      document.getElementById('post-body').value=post?.draft.body||'';
+      document.getElementById('post-date').value=post?.draft.date||new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+      document.getElementById('post-pinned').checked=post?.draft.pinned===true;
+      document.getElementById('post-unpublish').hidden=!post?.published;
+    }
+    async function openEditor(category=selectedBoard,id=''){
+      if(!isAdmin||editorBusy)return;
+      editor.showModal();editorLock(true);feedback(editorFeedback,'글 목록을 불러오고 있습니다.');
+      try{editorState=await request('/api/post-list');categoryInput.value=category;fillEditor(id);feedback(editorFeedback,'');}
+      catch(error){feedback(editorFeedback,error.message);editorState=null;}
+      finally{editorLock(false);if(!editorState)for(const button of editorForm.querySelectorAll('[type="submit"]'))button.disabled=true;}
+    }
+    writeButton.addEventListener('click',()=>openEditor());
+    document.getElementById('post-editor-close').addEventListener('click',()=>{if(!editorBusy)editor.close();});
+    editor.addEventListener('cancel',event=>{if(editorBusy)event.preventDefault();});
+    categoryInput.addEventListener('change',()=>{if(editorState)fillEditor();});
+    choiceInput.addEventListener('change',()=>{if(editorState)fillEditor(choiceInput.value);});
+    editorForm.addEventListener('submit',async event=>{
+      event.preventDefault();if(!isAdmin||editorBusy||!editorState)return;
+      const category=categoryInput.value,action=event.submitter?.dataset.action||'publish';
+      const payload={category,revision:editorState[category].revision,id:choiceInput.value||undefined,action,post:{title:document.getElementById('post-title').value,body:document.getElementById('post-body').value,date:document.getElementById('post-date').value,pinned:document.getElementById('post-pinned').checked}};
+      editorLock(true);feedback(editorFeedback,'저장하고 있습니다.');
+      try{const saved=await request('/api/post-save',payload);editorState[category]=saved;fillEditor(saved.id);renderPortal(await request('/api/portal'));feedback(editorFeedback,action==='draft'?'초안을 저장했습니다. 회원에게는 게시되지 않습니다.':action==='unpublish'?'게시를 내렸습니다. 글은 초안으로 보관됩니다.':'게시했습니다. 회원 홈페이지에 반영되었습니다.',true);}
+      catch(error){feedback(editorFeedback,error.message);}
+      finally{editorLock(false);}
+    });
 
     if (apiBase) loadPortal();
     window.addEventListener('pageshow', event => {

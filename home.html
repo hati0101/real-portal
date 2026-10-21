@@ -16,7 +16,7 @@
   <div class="home-shell">
     <header class="site-header home-header">
       <a class="wordmark" href="./home.html" aria-label="REAL 홈페이지"><span class="brand-symbol" aria-hidden="true"></span>REAL</a>
-      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices">공지사항</a><a href="#download">다운로드</a></nav>
+      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#patchnotes" data-board="patchnotes">패치노트</a><a href="#download">다운로드</a></nav>
       <div class="account-menu"><span id="account-name" class="account-name">회원</span><button id="logout-button" type="button" class="text-button">로그아웃<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 3H4v14h4m4-11 4 4-4 4m-5-4h9"/></svg></button></div>
     </header>
 
@@ -30,8 +30,9 @@
       <p id="home-feedback" class="form-feedback home-feedback" role="alert" tabindex="-1" hidden></p>
       <div class="home-grid" id="portal-content" hidden>
         <section id="notices" class="notice-section" aria-labelledby="notices-title">
-          <div class="section-heading"><h2 id="notices-title">공지사항</h2><span class="section-caption">REAL의 소식을 전합니다.</span></div>
-          <div id="notice-list"></div>
+          <div class="section-heading"><h2 id="notices-title" class="sr-only">공지와 패치노트</h2><div class="board-tabs" role="tablist" aria-label="게시판"><button type="button" id="notices-tab" role="tab" aria-selected="true" aria-controls="notice-list" data-board="notices">공지사항</button><button type="button" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</button></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
+          <div id="notice-list" class="board-list" role="tabpanel" aria-labelledby="notices-tab" tabindex="0"></div>
+          <div id="patchnotes" class="board-list" role="tabpanel" aria-labelledby="patchnotes-tab" tabindex="0" hidden></div>
         </section>
 
         <section id="download" class="download-section" aria-labelledby="download-title">
@@ -49,6 +50,17 @@
         <label class="registration-switch" for="registration-switch"><span>신규 가입 접수</span><input id="registration-switch" type="checkbox" role="switch" disabled><span class="switch-track" aria-hidden="true"></span><span id="registration-switch-label">닫힘</span></label>
         <p id="admin-feedback" class="admin-feedback" role="status" aria-live="polite" hidden></p>
       </section>
+      <dialog id="post-editor" class="post-editor" aria-labelledby="post-editor-title">
+        <div class="dialog-heading"><h2 id="post-editor-title">글 작성·수정</h2><button id="post-editor-close" type="button" class="icon-button" aria-label="편집창 닫기">×</button></div>
+        <form id="post-editor-form" method="post">
+          <div class="editor-row"><label>게시판<select id="post-category"><option value="notices">공지사항</option><option value="patchnotes">패치노트</option></select></label><label>저장된 글<select id="post-choice"><option value="">새 글 작성</option></select></label></div>
+          <label>제목<input id="post-title" type="text" maxlength="160" required></label>
+          <div class="editor-row"><label>표시 날짜<input id="post-date" type="date" required></label><label class="editor-pin"><input id="post-pinned" type="checkbox">상단 고정</label></div>
+          <label>본문<textarea id="post-body" rows="12" maxlength="12000" required></textarea></label>
+          <p id="post-feedback" class="form-feedback" role="status" hidden></p>
+          <div class="editor-actions"><button type="submit" data-action="publish" class="button button-primary">게시하기</button><button type="submit" data-action="draft" class="button button-secondary">초안 저장</button><button id="post-unpublish" type="submit" data-action="unpublish" class="button button-secondary" hidden>게시 내리기</button></div>
+        </form>
+      </dialog>
       <noscript><p class="form-feedback">계정 메뉴를 이용하려면 브라우저에서 JavaScript를 허용해 주세요.</p></noscript>
     </main>
     <footer class="site-footer home-footer"><span>REAL</span><span>회원 홈페이지</span></footer>
