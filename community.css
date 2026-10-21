@@ -74,4 +74,6 @@
 
 .trade-actions{flex-wrap:wrap;column-gap:10px;row-gap:0}.trade-completed{color:var(--muted,#5e685b)}.trade-row.is-completed .trade-content{color:var(--muted,#5e685b)}
 
-.forum-managed-row{border-bottom:1px solid var(--border)}.forum-managed-row .forum-row{border-bottom:0}.forum-list-actions{display:flex;justify-content:flex-end;gap:16px;padding:0 24px 8px}.forum-list-actions .text-button{font-size:12px;min-height:36px}@media(max-width:720px){.forum-list-actions{padding-right:16px}}
+
+/* Readable titles and management controls inside each post. */
+.forum-row-title{font-size:18px;font-weight:600;line-height:1.6}.forum-detail-heading h2{font-size:28px}.forum-detail-heading>.forum-actions{margin-top:14px;flex-wrap:wrap}.forum-detail-heading>.forum-actions .text-button{font-size:14px;min-height:40px;padding:0 14px;border:1px solid var(--border);border-radius:5px}@media(max-width:720px){.forum-row-title{font-size:16px}.forum-detail-heading h2{font-size:24px}}
