@@ -1,0 +1,107 @@
+/* Shared color themes. Forum layout and the homepage banner remain independent. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background: #e9e5d8; --surface: #faf7ed; --surface-raised: #f0ecde; --input: #fffdf7;
+  --text: #303d35; --muted: #5e685b; --quiet: #66715f; --border: #c9c5b1; --input-border: #899482;
+  --accent: #315f48; --accent-hover: #234d38; --accent-ink: #fffdf4;
+  --error: #a33332; --error-surface: #f5e8d7;
+}
+:root[data-theme="dark"], :root[data-theme="dark"] .forum-theme {
+  color-scheme: dark;
+  --bg: #0c1d1b; --background: #0c1d1b; --surface: #132b29; --surface-raised: #1d3933; --input: #0d211e;
+  --text: #f5efdf; --muted: #bbcec5; --quiet: #a7bdb1; --border: #38564c; --input-border: #627f72;
+  --accent: #dfc68a; --accent-hover: #f0dca5; --accent-ink: #1b2b23;
+  --error: #ffbbb2; --error-surface: #382825;
+}
+html[data-theme] { background: var(--background); scrollbar-color: var(--border) var(--background); }
+html[data-theme] :is(button, a, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent); outline-offset: 3px;
+}
+html[data-theme] :is(input, textarea, select) { accent-color: var(--accent); }
+html[data-theme] :is(.field-group input, .forum-dialog input, .forum-dialog textarea, .support-dialog input, .support-dialog textarea, .support-dialog select, .post-editor input, .post-editor textarea, .post-editor select, .server-state-form select) {
+  color: var(--text); background: var(--input); border-color: var(--input-border);
+}
+html[data-theme] :is(input, textarea)::placeholder { color: var(--quiet); opacity: 1; }
+html[data-theme] :is(.field-group input, .forum-dialog input, .forum-dialog textarea, .support-dialog input, .support-dialog textarea, .support-dialog select, .post-editor input, .post-editor textarea, .post-editor select):hover { border-color: var(--quiet); }
+html[data-theme] :is(.field-group input, .forum-dialog input, .forum-dialog textarea, .support-dialog input, .support-dialog textarea, .support-dialog select, .post-editor input, .post-editor textarea, .post-editor select):focus { border-color: var(--accent); }
+html[data-theme] input[aria-invalid="true"] { border-color: var(--error); }
+html[data-theme] .form-feedback { border-color: var(--error); color: var(--error); background: var(--error-surface); }
+html[data-theme] .form-feedback.is-success { border-color: var(--border); color: var(--accent); background: var(--surface-raised); }
+html[data-theme] .connection-notice { border-color: var(--border); color: var(--muted); background: var(--surface-raised); }
+html[data-theme] .site-footer { border-color: var(--border); }
+html[data-theme] .support-delete { color: var(--error); }
+
+.theme-toggle {
+  min-width: 44px; min-height: 44px; padding: 9px 12px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  flex-shrink: 0; border: 1px solid var(--border); border-radius: 6px; color: var(--text); background: var(--surface);
+  font: inherit; font-size: 12px; line-height: 1.5; white-space: nowrap;
+}
+.theme-toggle:hover { background: var(--surface-raised); border-color: var(--accent); }
+.theme-toggle[aria-pressed="true"] { border-color: var(--accent); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .theme-moon { display: none; }
+html[data-theme="dark"] .theme-toggle .theme-sun { display: none; }
+html[data-theme="dark"] .theme-toggle .theme-moon { display: block; }
+.entry-header { gap: 18px; }
+@media (max-width: 600px) { .theme-toggle { padding: 9px; } .theme-toggle [data-theme-label] { display: none; } }
+@media (max-width: 600px) {
+  .forum-theme .home-header { gap: 8px; }
+  .forum-theme .home-header .wordmark { gap: 8px; }
+  .forum-theme .account-menu { gap: 6px; }
+  .forum-theme .account-name { max-width: 72px; }
+  .forum-theme .account-menu .text-button { min-height: 44px; }
+}
+
+/* Login and legacy development page use the same parchment palette as the light forum. */
+html[data-theme="light"] .auth-tabs button:hover { background: #e3e9d8; color: var(--text); }
+html[data-theme="light"] .auth-tabs button[aria-selected="true"] { background: #315f48; color: #fffdf4; }
+html[data-theme="light"] .welcome-art { color: #71916e; }
+html[data-theme="light"] .icon-button:hover { background: #e3e9d8; color: var(--text); }
+html[data-theme="light"] .button-primary:active:not(:disabled) { background: #254c38; }
+html[data-theme="light"] .form-feedback.is-success { color: #315f48; background: #e9efdf; }
+
+/* Dark forum colors cover content, forms and overlay shells without restyling their layout. */
+html[data-theme="dark"] .forum-theme {
+  background-color: var(--background);
+  background-image: radial-gradient(ellipse at 0 0, #28493b55, transparent 60%), repeating-linear-gradient(0deg, #dec88903 0 1px, transparent 1px 4px);
+}
+html[data-theme="dark"] .forum-theme :is(.site-header, .home-footer, .notice, .install-guide, .server-state-form, .forum-list-heading, .forum-row, .forum-dialog-top, .forum-comments, .forum-comment, .forum-pinned, .development-list li) { border-color: var(--border); }
+html[data-theme="dark"] .forum-theme :is(.notice-section, .download-section, .forum-shortcuts, .chat-panel, dialog) { color: var(--text); background: var(--surface); border-color: var(--border); box-shadow: 0 4px 18px #00000020; }
+html[data-theme="dark"] .forum-theme :is(.section-heading, .forum-list-heading, .server-status-panel, .admin-controls, .support-alert, .support-answer, .forum-public-note) { background: var(--surface-raised); color: var(--muted); border-color: var(--border); box-shadow: none; }
+html[data-theme="dark"] .forum-theme :is(.wordmark, .download-icon, .forum-comment-count, .notice-tag, .support-ticket-meta) { color: var(--accent); }
+html[data-theme="dark"] .forum-theme .brand-symbol,
+html[data-theme="dark"] .forum-theme .brand-symbol::after { border-color: var(--accent); }
+html[data-theme="dark"] .forum-theme .account-name::before { background: #92c7ab; }
+html[data-theme="dark"] .forum-theme :is(.account-menu, .download-section h2, .forum-row, .notice-body, .support-message, .forum-pinned-row) { color: var(--text); }
+html[data-theme="dark"] .forum-theme :is(.forum-toolbar p, .forum-author, .forum-date, .forum-empty, .server-status-values > span, #server-checked-at, .download-description, .download-file, .download-source, .install-guide summary, .install-guide p, .forum-shortcuts h2, .forum-side-note, .notice-meta, .admin-controls p, .home-footer, .forum-dialog-top, .forum-detail-meta, .forum-comment-meta time, .form-note, .chat-heading p, .image-status) { color: var(--muted); }
+html[data-theme="dark"] .forum-theme :is(.text-button, .icon-button, .forum-shortcuts a, .image-gallery a) { color: var(--accent); }
+html[data-theme="dark"] .forum-theme :is(.text-button, .icon-button, .forum-shortcuts a):hover { color: var(--accent-hover); background: var(--surface-raised); }
+html[data-theme="dark"] .forum-theme .forum-danger { color: var(--error); }
+html[data-theme="dark"] .forum-theme .board-tabs [role="tab"] { color: var(--muted); }
+html[data-theme="dark"] .forum-theme .board-tabs [role="tab"]:hover { color: var(--text); background: #2b4c40; }
+html[data-theme="dark"] .forum-theme .board-tabs [aria-selected="true"] { color: var(--accent-ink); background: var(--accent); box-shadow: none; }
+html[data-theme="dark"] .forum-theme .board-tabs [aria-selected="true"]:hover { color: var(--accent-ink); background: var(--accent-hover); }
+html[data-theme="dark"] .forum-theme .button-primary { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); box-shadow: none; }
+html[data-theme="dark"] .forum-theme .button-primary:hover { background: var(--accent-hover); }
+html[data-theme="dark"] .forum-theme .button-primary:active { background: #cdb375; }
+html[data-theme="dark"] .forum-theme .button-secondary { color: var(--text); background: var(--surface-raised); border-color: var(--border); }
+html[data-theme="dark"] .forum-theme :is(.forum-row:hover, .support-ticket:hover, .support-ticket[aria-pressed="true"], .forum-alert-item:hover) { color: var(--text); background: #25473c; }
+html[data-theme="dark"] .forum-theme :is(.forum-tag, .notice-tag, .forum-pinned-row > span:first-child) { color: #efd69b; background: #3a3926; border-color: #706545; }
+html[data-theme="dark"] .forum-theme .forum-pinned { background: #1b322c; }
+html[data-theme="dark"] .forum-theme .forum-pinned-row:hover { color: var(--accent); }
+html[data-theme="dark"] .forum-theme .server-status-values strong { color: #a9ddbd; }
+html[data-theme="dark"] .forum-theme .server-status-panel[data-state="maintenance"] #server-state-value { color: #efd18d; }
+html[data-theme="dark"] .forum-theme .server-status-panel[data-state="off"] #server-state-value { color: var(--error); }
+html[data-theme="dark"] .forum-theme .support-badge { background: var(--accent); color: var(--accent-ink); }
+html[data-theme="dark"] .forum-theme :is(.support-ticket, .forum-alert-item, .image-picker) { color: var(--text); background: var(--input); border-color: var(--border); }
+html[data-theme="dark"] .forum-theme .support-ticket.is-unread { background: #214235; border-color: #839c6c; }
+html[data-theme="dark"] .forum-theme .image-preview-grid button { color: var(--text); background: var(--surface-raised); border-color: var(--border); }
+html[data-theme="dark"] .forum-theme .image-preview-grid button:hover { background: #2b4c40; }
+html[data-theme="dark"] .forum-theme :is(.image-preview-grid img, .image-gallery img) { background: var(--input); }
+html[data-theme="dark"] .forum-theme dialog::backdrop { background: #030c0ac4; }
+html[data-theme="dark"] .forum-theme .switch-track { background: var(--input); border-color: var(--quiet); }
+html[data-theme="dark"] .forum-theme .switch-track::after { background: var(--muted); }
+html[data-theme="dark"] .forum-theme .registration-switch input:checked + .switch-track { background: var(--accent); border-color: var(--accent); }
+html[data-theme="dark"] .forum-theme .registration-switch input:checked + .switch-track::after { background: var(--accent-ink); }
+html[data-theme="dark"] .forum-theme #admin-feedback { color: var(--accent); }
+html[data-theme="dark"] .forum-theme #admin-feedback.is-error { color: var(--error); }
