@@ -1,0 +1,10 @@
+.forum-shortcuts #discord-connect{min-height:44px;white-space:normal}
+#discord-feedback{font-size:12px;line-height:1.6;overflow-wrap:anywhere;margin:0 0 8px}
+.discord-callback{width:min(100% - 32px,480px);margin:clamp(24px,10vh,100px) auto}
+.discord-callback>.wordmark{display:inline-block;margin-bottom:32px}
+.discord-callback .member-panel{width:100%;max-width:none}
+.discord-callback h1{font-size:28px}
+.discord-callback #discord-result{line-height:1.8;overflow-wrap:anywhere}
+.discord-actions{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.discord-actions a{min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center}
+.discord-actions [hidden]{display:none}

@@ -250,9 +250,11 @@
     const serverInfo=window.RealPortalInfo.init({request});
     const community=window.RealCommunity.init({request,navigate:category=>selectBoard(category)});
     const development=window.RealPortalInfo.initDevelopment({request});
+    const discord=window.RealDiscord.init({request});
     logout.disabled = true;
 
     function clearPortal() {
+      discord.clear();
       content.hidden = true;
       notices.replaceChildren();
       document.getElementById('community-pinned').replaceChildren();
@@ -378,6 +380,7 @@
         isAdmin = session.user?.isAdmin === true;
         const portal = await request('/api/portal');
         renderPortal(portal);
+        discord.enable();
         chatOpen.disabled=false;
         showChat();
         community.enable();
