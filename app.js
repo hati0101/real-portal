@@ -404,13 +404,13 @@
       }
     }
 
-    const boards=['notices','patchnotes','development','community','support'];
+    const boards=['notices','patchnotes','development','guides','community','support'];
     function selectBoard(category, focus=false, updateHistory=true) {
       if(!boards.includes(category))return;
       selectedBoard = category;
       notices.hidden = category !== 'notices';patchNotes.hidden = category !== 'patchnotes';
       document.getElementById('development').hidden = category !== 'development';
-      document.getElementById('community-board').hidden = !['community','support'].includes(category);
+      document.getElementById('community-board').hidden = !['community','support','guides'].includes(category);
       community.selectBoard(category);
       writeButton.hidden = !isAdmin || !['notices','patchnotes'].includes(category);
       for(const tab of document.querySelectorAll('.board-tabs [role="tab"]')){const active=tab.dataset.board===category;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;if(active&&focus)tab.focus();}
