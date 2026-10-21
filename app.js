@@ -239,7 +239,7 @@
     const categoryInput = document.getElementById('post-category');
     const choiceInput = document.getElementById('post-choice');
     const editorFeedback = document.getElementById('post-feedback');
-    let selectedBoard = 'notices', editorState = null, editorBusy = false;
+    let selectedBoard = 'community', editorState = null, editorBusy = false;
     const downloadLink = document.getElementById('download-link');
     const adminControls = document.getElementById('admin-controls');
     const registrationSwitch = document.getElementById('registration-switch');
@@ -248,11 +248,13 @@
     let registrationOpen = false;
     const support=window.RealSupport.init({request});
     const serverInfo=window.RealPortalInfo.init({request});
+    const community=window.RealCommunity.init({request});
     logout.disabled = true;
 
     function clearPortal() {
       content.hidden = true;
       notices.replaceChildren();
+      document.getElementById('community-pinned').replaceChildren();
       patchNotes.replaceChildren();
       writeButton.hidden = true;
       downloadLink.removeAttribute('href');
@@ -267,7 +269,7 @@
         if (!notice || typeof notice.title !== 'string' || typeof notice.body !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(notice.date)) continue;
         const article = document.createElement('details');
         article.className = 'notice';
-        article.open = index === 0;
+        article.open = false;
         const summary = document.createElement('summary');
         const meta = document.createElement('div');
         meta.className = 'notice-meta';
@@ -306,9 +308,11 @@
       if (downloadUrl.protocol !== 'https:' || downloadUrl.username || downloadUrl.password) throw new Error('다운로드 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.');
       clearPortal();
       renderPosts(notices,portal.notices,'notices');
+      const pinned=document.getElementById('community-pinned');pinned.replaceChildren();
+      for(const notice of portal.notices.filter(p=>p.pinned).slice(0,3)){const row=document.createElement('button');row.type='button';row.className='forum-pinned-row';const label=document.createElement('span');label.textContent='공지';const title=document.createElement('span');title.textContent=notice.title;row.append(label,title);row.addEventListener('click',()=>{selectBoard('notices');const item=[...notices.querySelectorAll('details')].find(el=>el.querySelector('h3')?.textContent===notice.title);if(item){item.open=true;item.scrollIntoView({block:'nearest'});}});pinned.append(row);}pinned.hidden=!pinned.childElementCount;
       renderPosts(patchNotes,Array.isArray(portal.patchNotes)?portal.patchNotes:[],'patchnotes');
       document.getElementById('account-name').textContent = typeof portal.profile?.nickname === 'string' ? portal.profile.nickname : '회원';
-      writeButton.hidden = !isAdmin;
+      writeButton.hidden = !isAdmin || selectedBoard === 'community';
       downloadLink.href = downloadUrl.href;
       document.getElementById('download-filename').textContent = typeof portal.download.fileName === 'string' ? portal.download.fileName : '클라이언트 설치 파일';
       document.getElementById('download-size').textContent = typeof portal.download.sizeLabel === 'string' ? portal.download.sizeLabel : '';
@@ -338,6 +342,7 @@
     });
 
     async function loadPortal() {
+      community.clear();
       support.clear();
       serverInfo.clear();
       closeChat();chatOpen.disabled=true;
@@ -358,6 +363,7 @@
         const portal = await request('/api/portal');
         renderPortal(portal);
         chatOpen.disabled=false;
+        community.enable();
         support.enable(isAdmin);
         serverInfo.enable(isAdmin);
         apiStatus.hidden = true;
@@ -383,10 +389,14 @@
     function selectBoard(category, focus=false) {
       selectedBoard = category;
       notices.hidden = category !== 'notices';patchNotes.hidden = category !== 'patchnotes';
+      document.getElementById('community-board').hidden = category !== 'community';
+      writeButton.hidden = !isAdmin || category === 'community';
+      for(const link of document.querySelectorAll('.home-nav [data-board]'))link.classList.toggle('is-active',link.dataset.board===category);
       for(const tab of document.querySelectorAll('.board-tabs [role="tab"]')){const active=tab.dataset.board===category;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;if(active&&focus)tab.focus();}
     }
     for(const button of document.querySelectorAll('[data-board]'))button.addEventListener('click',()=>selectBoard(button.dataset.board));
-    document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();selectBoard(event.key==='Home'?'notices':event.key==='End'?'patchnotes':selectedBoard==='notices'?'patchnotes':'notices',true);}});
+    document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const boards=['notices','patchnotes','community'],index=boards.indexOf(selectedBoard);selectBoard(event.key==='Home'?boards[0]:event.key==='End'?boards[2]:boards[(index+(event.key==='ArrowRight'?1:2))%3],true);}});
+    selectBoard('community');
     function editorLock(busy){editorBusy=busy;for(const control of editorForm.elements)control.disabled=busy;editorForm.setAttribute('aria-busy',String(busy));}
     function fillEditor(id=''){
       const posts=editorState[categoryInput.value].posts;
@@ -427,6 +437,7 @@
       if (event.persisted && apiBase) loadPortal();
     });
     window.addEventListener('pagehide', () => {
+      community.clear();
       support.clear();
       serverInfo.clear();
       closeChat();
@@ -476,6 +487,7 @@
       feedback(output, '');
       try {
         await request('/api/logout', {});
+        community.clear();support.clear();serverInfo.clear();
         closeChat();
         clearPortal();
         location.assign('./index.html');
