@@ -54,11 +54,8 @@ h1, h2, h3, p { margin: 0; }
 .point-one { top: 18%; left: 22%; }.point-two { bottom: 25%; right: 14%; }
 .welcome-copy { position: relative; z-index: 1; padding-left: 24px; }
 .eyebrow { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
-.welcome-copy > .eyebrow { display: flex; gap: 10px; align-items: center; margin-bottom: 28px; letter-spacing: .04em; color: var(--muted); }
-.welcome-copy > .eyebrow span { height: 5px; width: 5px; border-radius: 100%; background: var(--accent); }
 .welcome h1 { font-size: clamp(68px, 6.3vw, 94px); letter-spacing: -.07em; line-height: 1.19; font-weight: 500; }
 .welcome h1 > span { font-family: Arial, sans-serif; font-size: 1.25em; line-height: 1.1; font-weight: 700; letter-spacing: -.07em; color: var(--accent); }
-.welcome-description { margin-top: 29px; color: var(--muted); font-size: 16px; line-height: 1.95; }
 .welcome-caption { margin: 54px 0 0 24px; position: relative; color: var(--quiet); font-size: 10px; letter-spacing: .25em; }
 .member-panel { width: 100%; max-width: 458px; padding: 38px 36px 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 20px 70px #00000016; }
 .panel-heading .eyebrow { margin-bottom: 9px; }
@@ -173,6 +170,49 @@ dialog > .button { width: 100%; margin-top: 26px; }
 .admin-controls .admin-feedback { width: 100%; margin: 0; color: var(--accent); }
 .admin-feedback.is-error { color: var(--error); }
 @media (min-width: 1440px) { .entry-main { gap: 96px; } }
+@media (min-width: 1600px) {
+  .entry-shell { max-width: 1648px; padding-right: 72px; padding-left: 72px; }
+  .entry-main { grid-template-columns: minmax(0, 1fr) 496px; gap: 144px; padding-top: 24px; padding-bottom: 32px; }
+  .welcome { min-height: 640px; }
+  .welcome-art { width: 640px; left: -40px; }
+  .welcome-copy { padding-left: 32px; }
+  .welcome h1 { font-size: 104px; }
+  .welcome-caption { margin-left: 32px; font-size: 11px; }
+  .member-panel { max-width: 496px; padding: 40px 40px 32px; }
+  .panel-heading h2 { font-size: 32px; }
+  .panel-heading > p:last-child { font-size: 14px; }
+  .auth-tabs button { min-height: 48px; font-size: 15px; }
+  .field-group label { font-size: 14px; }
+  .field-group input { height: 54px; font-size: 16px; }
+  .field-group input::placeholder { font-size: 14px; }
+  .password-toggle { height: 50px; }
+  .button { min-height: 54px; font-size: 15px; }
+  .panel-note, .registration-status, .checkbox-label, .terms-open { font-size: 13px; }
+  .connection-notice, .form-feedback { font-size: 14px; }
+  .header-caption { font-size: 14px; }
+  .site-footer { font-size: 12px; }
+  .home-shell { max-width: 1600px; padding-right: 64px; padding-left: 64px; }
+  .home-header { gap: 64px; }
+  .home-nav a { font-size: 15px; }
+  .account-name, .account-menu .text-button { font-size: 14px; }
+  .home-intro { min-height: 224px; padding-top: 36px; padding-bottom: 36px; }
+  .home-intro h1 { font-size: 42px; }
+  .home-intro p:last-child { font-size: 16px; }
+  .home-grid { grid-template-columns: minmax(0, 1fr) 456px; gap: 72px; }
+  .home-main { padding-bottom: 64px; }
+  .section-heading h2 { font-size: 23px; }
+  .section-caption, .notice-meta { font-size: 13px; }
+  .notice-tag { font-size: 12px; }
+  .notice h3 { font-size: 24px; }
+  .notice-body { max-width: 760px; font-size: 16px; line-height: 1.9; }
+  .download-section { padding: 32px; }
+  .download-section h2 { font-size: 32px; }
+  .download-description { font-size: 15px; }
+  .download-file, .download-source { font-size: 12px; }
+  .install-guide h3 { font-size: 14px; }
+  .install-guide li { font-size: 13px; }
+  .install-guide li > span { font-size: 11px; }
+}
 @media (max-width: 1100px) {
   .entry-shell, .home-shell { padding-right: 36px; padding-left: 36px; }
   .entry-main { gap: 32px; grid-template-columns: 1fr 1fr; }
@@ -189,12 +229,10 @@ dialog > .button { width: 100%; margin-top: 26px; }
   .site-header { min-height: 84px; }
   .entry-main { display: flex; flex-direction: column; gap: 28px; padding: 18px 0 42px; }
   .welcome { width: 100%; min-height: auto; max-width: 458px; }
-  .welcome-copy > .eyebrow, .welcome-caption { display: none; }
+  .welcome-caption { display: none; }
   .welcome h1 { font-size: 42px; line-height: 1.2; }
   .welcome h1 br { display: none; }
   .welcome h1 > span { font-size: 1.08em; margin-left: 8px; }
-  .welcome-description { font-size: 13px; margin-top: 13px; line-height: 1.8; }
-  .welcome-description br { display: none; }
   .welcome-art { width: 175px; right: -12px; left: auto; opacity: .35; }
   .member-panel { position: relative; padding: 28px 26px 24px; }
   .panel-heading h2 { font-size: 25px; }
