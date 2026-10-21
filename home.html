@@ -29,6 +29,7 @@
 
       <p class="connection-notice" id="api-status" role="status">로그인 상태를 확인하고 있습니다.</p>
       <p id="home-feedback" class="form-feedback home-feedback" role="alert" tabindex="-1" hidden></p>
+      <div id="support-alert" class="support-alert" hidden><span id="support-alert-text" role="status" aria-live="polite"></span><button id="support-alert-open" type="button" class="text-button">확인하기</button></div>
       <div class="home-grid" id="portal-content" hidden>
         <section id="notices" class="notice-section" aria-labelledby="notices-title">
           <div class="section-heading"><h2 id="notices-title" class="sr-only">공지와 패치노트</h2><div class="board-tabs" role="tablist" aria-label="게시판"><button type="button" id="notices-tab" role="tab" aria-selected="true" aria-controls="notice-list" data-board="notices">공지사항</button><button type="button" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</button></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
@@ -78,7 +79,7 @@
             <article id="support-detail" hidden>
               <p id="support-detail-meta" class="form-note"></p><h3 id="support-detail-title"></h3><p id="support-detail-author" class="form-note"></p><div id="support-detail-body" class="support-message"></div>
               <section id="support-answer" class="support-answer"><h4>운영자 답변</h4><p id="support-answer-body" class="support-message"></p></section>
-              <form id="support-manage" hidden><h4>접수 처리</h4><label>처리 상태<select id="support-state"><option value="new">접수</option><option value="reviewing">확인 중</option><option value="completed">답변 완료</option></select></label><label>작성자에게 표시할 답변<textarea id="support-reply" rows="6" maxlength="5000" placeholder="처리 결과나 안내를 남겨 주세요"></textarea></label><button type="submit" class="button button-primary">처리 내용 저장</button></form>
+              <form id="support-manage" hidden><h4>접수 처리</h4><label>처리 상태<select id="support-state"><option value="new">접수</option><option value="reviewing">확인 중</option><option value="completed">답변 완료</option></select></label><label>작성자에게 표시할 답변<textarea id="support-reply" rows="6" maxlength="5000" placeholder="처리 결과나 안내를 남겨 주세요"></textarea></label><div class="support-actions"><button type="submit" class="button button-primary">처리 내용 저장</button><button id="support-delete" type="button" class="text-button support-delete">문의 삭제</button></div></form>
             </article>
           </section>
         </div>
