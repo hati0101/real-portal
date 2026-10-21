@@ -250,6 +250,7 @@
     const serverInfo=window.RealPortalInfo.init({request});
     const community=window.RealCommunity.init({request,navigate:category=>selectBoard(category)});
     const development=window.RealPortalInfo.initDevelopment({request});
+    const rotations=window.RealRotations.init({request});
     const discord=window.RealDiscord.init({request});
     logout.disabled = true;
 
@@ -362,7 +363,7 @@
       community.clear();
       support.clear();
       serverInfo.clear();
-      development.clear();
+      development.clear();rotations.clear();
       closeChat();chatOpen.disabled=true;
       clearPortal();
       adminControls.hidden = true;
@@ -384,7 +385,7 @@
         chatOpen.disabled=false;
         showChat();
         community.enable();
-        development.enable();
+        development.enable();rotations.enable();
         support.enable(isAdmin);
         serverInfo.enable(isAdmin);
         apiStatus.hidden = true;
@@ -407,12 +408,13 @@
       }
     }
 
-    const boards=['notices','patchnotes','development','guides','community','trade','support'];
+    const boards=['notices','patchnotes','development','guides','community','trade','support','rotations'];
     function selectBoard(category, focus=false, updateHistory=true) {
       if(!boards.includes(category))return;
       selectedBoard = category;
       notices.hidden = category !== 'notices';patchNotes.hidden = category !== 'patchnotes';
       document.getElementById('development').hidden = category !== 'development';
+      document.getElementById('rotations').hidden = category !== 'rotations';
       document.getElementById('community-board').hidden = !['community','support','guides','trade'].includes(category);
       community.selectBoard(category);
       writeButton.hidden = !isAdmin || !['notices','patchnotes'].includes(category);
@@ -420,7 +422,7 @@
       if(updateHistory&&location.hash!=='#'+category)history.pushState(null,'','#'+category);
     }
     for(const link of document.querySelectorAll('[data-board]'))link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button>0)return;event.preventDefault();selectBoard(link.dataset.board);});
-    document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const index=boards.indexOf(selectedBoard);selectBoard(event.key==='Home'?boards[0]:event.key==='End'?boards[boards.length-1]:boards[(index+(event.key==='ArrowRight'?1:boards.length-1))%boards.length],true);}else if(event.key===' '&&event.target.matches('[role="tab"]')){event.preventDefault();selectBoard(event.target.dataset.board,true);}});
+    document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(event.target.matches('[role="tab"]')&&['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const index=boards.indexOf(selectedBoard);selectBoard(event.key==='Home'?boards[0]:event.key==='End'?boards[boards.length-1]:boards[(index+(event.key==='ArrowRight'?1:boards.length-1))%boards.length],true);}else if(event.key===' '&&event.target.matches('[role="tab"]')){event.preventDefault();selectBoard(event.target.dataset.board,true);}});
     function restoreBoard(){const category=location.hash.slice(1);if(boards.includes(category))selectBoard(category,false,false);else if(!location.hash)selectBoard('notices',false,false);}
     window.addEventListener('hashchange',restoreBoard);
     window.addEventListener('popstate',restoreBoard);
@@ -467,7 +469,7 @@
     });
     window.addEventListener('pagehide', () => {
       community.clear();
-      development.clear();
+      development.clear();rotations.clear();
       support.clear();
       serverInfo.clear();
       closeChat();
@@ -517,7 +519,7 @@
       feedback(output, '');
       try {
         await request('/api/logout', {});
-        community.clear();support.clear();serverInfo.clear();development.clear();
+        community.clear();support.clear();serverInfo.clear();development.clear();rotations.clear();
         closeChat();
         clearPortal();
         location.assign('./index.html');

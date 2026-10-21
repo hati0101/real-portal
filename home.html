@@ -21,6 +21,7 @@
   <script src="./attachments.js" defer></script>
   <script src="./support.js" defer></script>
   <script src="./portal-info.js" defer></script>
+  <script src="./rotations.js" defer></script>
   <script src="./community.js" defer></script>
   <script src="./discord-connect.js" defer></script>
   <script src="./app.js" defer></script>
@@ -45,10 +46,11 @@
       <div id="support-alert" class="support-alert" hidden><span id="support-alert-text" role="status" aria-live="polite"></span><button id="support-alert-open" type="button" class="text-button">확인하기</button></div>
       <div class="home-grid" id="portal-content" hidden>
         <section id="notices" class="notice-section" aria-labelledby="notices-title">
-          <div class="section-heading"><h2 id="notices-title" class="sr-only">REAL 게시판</h2><div class="board-tabs" role="tablist" aria-label="게시판"><a href="#notices" id="notices-tab" role="tab" aria-selected="true" aria-controls="notice-list" data-board="notices">공지사항</a><a href="#patchnotes" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</a><a href="#development" id="development-tab" role="tab" aria-selected="false" aria-controls="development" tabindex="-1" data-board="development">개발현황</a><a href="#guides" id="guides-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="guides">공략·정보</a><a href="#community" id="community-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="community">자유게시판</a><a href="#trade" id="trade-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="trade">거래게시판</a><a href="#support" id="support-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="support">문의·건의</a></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
+          <div class="section-heading"><h2 id="notices-title" class="sr-only">REAL 게시판</h2><div class="board-tabs" role="tablist" aria-label="게시판"><a href="#notices" id="notices-tab" role="tab" aria-selected="true" aria-controls="notice-list" data-board="notices">공지사항</a><a href="#patchnotes" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</a><a href="#development" id="development-tab" role="tab" aria-selected="false" aria-controls="development" tabindex="-1" data-board="development">개발현황</a><a href="#guides" id="guides-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="guides">공략·정보</a><a href="#community" id="community-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="community">자유게시판</a><a href="#trade" id="trade-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="trade">거래게시판</a><a href="#support" id="support-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="support">문의·건의</a><button id="support-open" type="button" class="board-dialog-button" aria-haspopup="dialog" disabled>버그제보<span id="support-badge" class="support-badge" hidden></span></button><a href="#rotations" id="rotations-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="rotations" data-board="rotations">일일·주간 구성</a></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
           <div id="notice-list" class="board-list" role="tabpanel" aria-labelledby="notices-tab" tabindex="0"></div>
           <div id="patchnotes" class="board-list" role="tabpanel" aria-labelledby="patchnotes-tab" tabindex="0" hidden></div>
           <section id="development" class="development-panel" role="tabpanel" aria-labelledby="development-tab" tabindex="0" hidden><div class="forum-toolbar"><div><h2>개발현황</h2><p>준비하고 있는 기능과 개선 사항입니다.</p></div></div><p id="development-feedback" class="form-note" role="status">공개된 개발 항목을 확인하고 있습니다.</p><p id="development-stamp" class="form-note"></p><ul id="development-list" class="development-list"></ul></section>
+          <section id="rotations" class="development-panel" role="tabpanel" aria-labelledby="rotations-tab" tabindex="0" hidden><div class="forum-toolbar"><div><h2>일일·주간 구성</h2><p>현재 적용된 카츄아박스와 주간 한정 의상 목록입니다.</p></div></div><p id="rotations-status" class="form-note" role="status">구성을 확인하고 있습니다.</p><div id="rotations-list" class="rotation-sections"></div></section>
           <section id="community-board" hidden role="tabpanel" aria-labelledby="community-tab" tabindex="0">
             <div id="community-pinned" class="forum-pinned" aria-label="고정 공지" hidden></div>
             <div class="forum-toolbar"><div><h2 id="community-title">자유게시판</h2><p id="community-total">모험가들의 이야기가 모이는 곳</p></div><button id="community-write" type="button" class="button button-primary">새 글 쓰기</button></div>
@@ -72,7 +74,7 @@
           <p class="download-source">다운로드가 안 되면 Google 계정으로 로그인한 뒤 다시 시도해 주세요.</p>
           <details class="install-guide"><summary>처음 오셨나요? 설치 안내</summary><ol><li><span>01</span><p>클라이언트 ZIP 파일을 다운로드합니다.</p></li><li><span>02</span><p>다운로드한 파일의 압축을 해제합니다.</p></li><li><span>03</span><p>폴더 안의 <strong>REAL.exe</strong>를 실행합니다.</p></li></ol></details>
         </section>
-        <section class="forum-shortcuts"><h2>모험가 쉼터</h2><button id="discord-connect" type="button" class="text-button" disabled>디스코드 연결</button><p id="discord-feedback" class="form-note" role="status" aria-live="polite"></p><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button><button id="support-open" type="button" class="text-button" aria-haspopup="dialog" disabled>기존 비공개 문의<span id="support-badge" class="support-badge" hidden></span></button><button id="community-alert-open" type="button" class="text-button" disabled><span id="community-alert-label">댓글 알림</span><span id="community-badge" class="support-badge" hidden></span></button></section>
+        <section class="forum-shortcuts"><h2>모험가 쉼터</h2><button id="discord-connect" type="button" class="text-button" disabled>디스코드 연결</button><p id="discord-feedback" class="form-note" role="status" aria-live="polite"></p><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button><button id="community-alert-open" type="button" class="text-button" disabled><span id="community-alert-label">댓글 알림</span><span id="community-badge" class="support-badge" hidden></span></button></section>
         <p class="forum-side-note">당신의 다음 모험도<br>REAL과 함께.</p>
         </aside>
       </div>
@@ -88,9 +90,9 @@
       </section>
       <button id="chat-restore" type="button" class="chat-restore button button-primary" aria-controls="chat-panel" aria-expanded="false" hidden>REAL 채팅 열기</button>
       <dialog id="support-dialog" class="support-dialog" aria-labelledby="support-title">
-        <div class="dialog-heading"><div><h2 id="support-title">기존 비공개 문의</h2><p id="support-description" class="form-note">이전에 접수한 문의와 답변입니다. 작성자와 운영자만 볼 수 있습니다.</p></div><button id="support-close" type="button" class="icon-button" aria-label="문의창 닫기">×</button></div>
+        <div class="dialog-heading"><div><h2 id="support-title">비공개 버그제보</h2><p id="support-description" class="form-note">제보 내용과 첨부 이미지는 작성자와 운영자만 볼 수 있습니다.</p></div><button id="support-close" type="button" class="icon-button" aria-label="문의창 닫기">×</button></div>
         <p id="support-feedback" class="form-feedback" role="status" tabindex="-1" hidden></p>
-        <div class="support-toolbar"><p id="support-summary" role="status"></p><button id="support-new" type="button" class="button button-primary">공개 문의·건의로 이동</button><button id="support-refresh" type="button" class="text-button">새로고침</button></div>
+        <div class="support-toolbar"><p id="support-summary" role="status"></p><button id="support-new" type="button" class="button button-primary">새 버그 제보</button><button id="support-refresh" type="button" class="text-button">새로고침</button></div>
         <div class="support-layout">
           <section class="support-inbox" aria-label="접수 목록">
             <div class="support-filters"><label>분류<select id="support-category-filter"><option value="all">전체 분류</option><option value="inquiry">문의</option><option value="suggestion">건의</option><option value="bug">버그 제보</option></select></label><label>상태<select id="support-status-filter"><option value="all">전체 상태</option><option value="new">접수</option><option value="reviewing">확인 중</option><option value="completed">답변 완료</option></select></label></div>
@@ -98,9 +100,9 @@
             <div class="support-pagination"><button id="support-prev" type="button" class="text-button">이전</button><span id="support-page"></span><button id="support-next" type="button" class="text-button">다음</button></div>
           </section>
           <section class="support-content" aria-label="접수 내용">
-            <p id="support-empty" class="form-note">이전 접수 내역을 선택해 주세요. 새 문의·건의는 공개 게시판에 작성하실 수 있습니다.</p>
+            <p id="support-empty" class="form-note">접수 내역을 선택하거나 새 버그를 제보해 주세요. 기존 비공개 문의도 여기에서 확인할 수 있습니다.</p>
             <form id="support-create" hidden>
-              <h3>새 문의·제보</h3><label>분류<select id="support-category" required><option value="inquiry">문의</option><option value="suggestion">건의</option><option value="bug">버그 제보</option></select></label>
+              <h3>비공개 버그 제보</h3><label>분류<select id="support-category" required><option value="bug">버그 제보</option></select></label>
               <p id="support-guide" class="form-note">궁금한 점이나 도움이 필요한 내용을 적어 주세요.</p>
               <label>제목<input id="support-subject" type="text" minlength="2" maxlength="100" required placeholder="내용을 한 줄로 요약해 주세요"></label>
               <label>내용<textarea id="support-body" rows="9" minlength="5" maxlength="5000" required placeholder="상황과 내용을 자세히 적어 주세요"></textarea></label><div id="support-images" class="image-picker"></div>

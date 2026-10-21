@@ -77,8 +77,8 @@ html[data-theme="dark"] .forum-theme :is(.forum-toolbar p, .forum-author, .forum
 html[data-theme="dark"] .forum-theme :is(.text-button, .icon-button, .forum-shortcuts a, .image-gallery a) { color: var(--accent); }
 html[data-theme="dark"] .forum-theme :is(.text-button, .icon-button, .forum-shortcuts a):hover { color: var(--accent-hover); background: var(--surface-raised); }
 html[data-theme="dark"] .forum-theme .forum-danger { color: var(--error); }
-html[data-theme="dark"] .forum-theme .board-tabs [role="tab"] { color: var(--muted); }
-html[data-theme="dark"] .forum-theme .board-tabs [role="tab"]:hover { color: var(--text); background: #2b4c40; }
+html[data-theme="dark"] .forum-theme .board-tabs :is([role="tab"],.board-dialog-button) { color: var(--muted); }
+html[data-theme="dark"] .forum-theme .board-tabs :is([role="tab"],.board-dialog-button):hover { color: var(--text); background: #2b4c40; }
 html[data-theme="dark"] .forum-theme .board-tabs [aria-selected="true"] { color: var(--accent-ink); background: var(--accent); box-shadow: none; }
 html[data-theme="dark"] .forum-theme .board-tabs [aria-selected="true"]:hover { color: var(--accent-ink); background: var(--accent-hover); }
 html[data-theme="dark"] .forum-theme .button-primary { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); box-shadow: none; }
