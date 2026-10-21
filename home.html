@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="robots" content="noindex, nofollow">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://222.103.200.184; frame-src https://hati0101.github.io; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://222.103.200.184; frame-src https://hati0101.github.io; form-action 'none'; base-uri 'none'; object-src 'none'">
   <title>모험가 게시판 · REAL</title>
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./community.css">
   <script src="./config.js" defer></script>
+  <script src="./attachments.js" defer></script>
   <script src="./support.js" defer></script>
   <script src="./portal-info.js" defer></script>
   <script src="./community.js" defer></script>
@@ -27,7 +28,7 @@
 
     <main id="home-main" class="home-main">
       <section class="home-intro" aria-labelledby="home-title">
-        <div class="forum-welcome"><p class="eyebrow">REAL · ADVENTURERS GUILD</p><h1 id="home-title">모험 끝에, 우리들의 이야기</h1><p>잠시 쉬어 가며 소식과 추억을 나누는 곳.</p></div><div class="hero-seal" aria-hidden="true"><span>REAL</span><small>OUR ADVENTURE</small></div>
+        <div class="forum-welcome"><p class="eyebrow">REAL · ADVENTURERS GUILD</p><h1 id="home-title">모험 끝에, 우리들의 이야기</h1><p>잠시 쉬어 가며 소식과 추억을 나누는 곳.</p></div>
 
       </section>
 
@@ -36,10 +37,10 @@
       <div id="support-alert" class="support-alert" hidden><span id="support-alert-text" role="status" aria-live="polite"></span><button id="support-alert-open" type="button" class="text-button">확인하기</button></div>
       <div class="home-grid" id="portal-content" hidden>
         <section id="notices" class="notice-section" aria-labelledby="notices-title">
-          <div class="section-heading"><h2 id="notices-title" class="sr-only">공지와 패치노트</h2><div class="board-tabs" role="tablist" aria-label="게시판"><button type="button" id="notices-tab" role="tab" aria-selected="false" aria-controls="notice-list" data-board="notices">공지사항</button><button type="button" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</button><button type="button" id="community-tab" role="tab" aria-selected="true" aria-controls="community-board" data-board="community">자유게시판</button></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
-          <div id="notice-list" class="board-list" hidden role="tabpanel" aria-labelledby="notices-tab" tabindex="0"></div>
+          <div class="section-heading"><h2 id="notices-title" class="sr-only">공지와 패치노트</h2><div class="board-tabs" role="tablist" aria-label="게시판"><button type="button" id="notices-tab" role="tab" aria-selected="true" aria-controls="notice-list" data-board="notices">공지사항</button><button type="button" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</button><button type="button" id="community-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="community">자유게시판</button></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
+          <div id="notice-list" class="board-list" role="tabpanel" aria-labelledby="notices-tab" tabindex="0"></div>
           <div id="patchnotes" class="board-list" role="tabpanel" aria-labelledby="patchnotes-tab" tabindex="0" hidden></div>
-          <section id="community-board" role="tabpanel" aria-labelledby="community-tab" tabindex="0">
+          <section id="community-board" hidden role="tabpanel" aria-labelledby="community-tab" tabindex="0">
             <div id="community-pinned" class="forum-pinned" aria-label="고정 공지" hidden></div>
             <div class="forum-toolbar"><div><h2>자유게시판</h2><p id="community-total">모험가들의 이야기가 모이는 곳</p></div><button id="community-write" type="button" class="button button-primary">새 글 쓰기</button></div>
             <p id="community-feedback" role="status" class="form-note"></p>
@@ -90,12 +91,12 @@
               <h3>새 문의·제보</h3><label>분류<select id="support-category" required><option value="inquiry">문의</option><option value="suggestion">건의</option><option value="bug">버그 제보</option></select></label>
               <p id="support-guide" class="form-note">궁금한 점이나 도움이 필요한 내용을 적어 주세요.</p>
               <label>제목<input id="support-subject" type="text" minlength="2" maxlength="100" required placeholder="내용을 한 줄로 요약해 주세요"></label>
-              <label>내용<textarea id="support-body" rows="9" minlength="5" maxlength="5000" required placeholder="상황과 내용을 자세히 적어 주세요"></textarea></label>
+              <label>내용<textarea id="support-body" rows="9" minlength="5" maxlength="5000" required placeholder="상황과 내용을 자세히 적어 주세요"></textarea></label><div id="support-images" class="image-picker"></div>
               <p class="form-note">비밀번호는 적지 마세요. 접수는 30초 간격으로, 최근 24시간 동안 5건까지 가능합니다.</p>
               <button type="submit" class="button button-primary">접수하기</button>
             </form>
             <article id="support-detail" hidden>
-              <p id="support-detail-meta" class="form-note"></p><h3 id="support-detail-title"></h3><p id="support-detail-author" class="form-note"></p><div id="support-detail-body" class="support-message"></div>
+              <p id="support-detail-meta" class="form-note"></p><h3 id="support-detail-title"></h3><p id="support-detail-author" class="form-note"></p><div id="support-detail-body" class="support-message"></div><div id="support-detail-images"></div>
               <section id="support-answer" class="support-answer"><h4>운영자 답변</h4><p id="support-answer-body" class="support-message"></p></section>
               <form id="support-manage" hidden><h4>접수 처리</h4><label>처리 상태<select id="support-state"><option value="new">접수</option><option value="reviewing">확인 중</option><option value="completed">답변 완료</option></select></label><label>작성자에게 표시할 답변<textarea id="support-reply" rows="6" maxlength="5000" placeholder="처리 결과나 안내를 남겨 주세요"></textarea></label><div class="support-actions"><button type="submit" class="button button-primary">처리 내용 저장</button><button id="support-delete" type="button" class="text-button support-delete">문의 삭제</button></div></form>
             </article>
@@ -116,7 +117,7 @@
       </dialog>
 
       <dialog id="community-detail" class="forum-dialog" aria-label="게시글과 댓글"><div class="forum-dialog-top"><span>REAL COMMUNITY</span><button type="button" id="community-detail-close" class="icon-button" aria-label="게시글 닫기">×</button></div><p id="community-detail-feedback" class="form-feedback" role="alert"></p><div id="community-detail-body"></div></dialog>
-      <dialog id="community-editor" class="forum-dialog" aria-labelledby="community-editor-title"><div class="dialog-heading"><h2 id="community-editor-title">새 이야기</h2><button type="button" id="community-editor-close" class="icon-button" aria-label="글쓰기 닫기">×</button></div><form id="community-form"><p class="form-note">로그인한 회원들이 볼 수 있습니다. 개인 문의는 ‘문의·제보’를 이용해 주세요.</p><label>제목<input id="community-subject" required minlength="2" maxlength="100" placeholder="어떤 이야기를 나눌까요?"></label><label>내용<textarea id="community-body" required maxlength="10000" rows="10" placeholder="모험가들과 나눌 이야기를 적어 주세요."></textarea></label><p id="community-editor-feedback" class="form-feedback" role="status"></p><button type="submit" class="button button-primary">게시하기</button></form></dialog>
+      <dialog id="community-editor" class="forum-dialog" aria-labelledby="community-editor-title"><div class="dialog-heading"><h2 id="community-editor-title">새 이야기</h2><button type="button" id="community-editor-close" class="icon-button" aria-label="글쓰기 닫기">×</button></div><form id="community-form"><p class="form-note">로그인한 회원들이 볼 수 있습니다. 개인 문의는 ‘문의·제보’를 이용해 주세요.</p><label>제목<input id="community-subject" required minlength="2" maxlength="100" placeholder="어떤 이야기를 나눌까요?"></label><label>내용<textarea id="community-body" required maxlength="10000" rows="10" placeholder="모험가들과 나눌 이야기를 적어 주세요."></textarea></label><div id="community-images" class="image-picker"></div><p id="community-editor-feedback" class="form-feedback" role="status"></p><button type="submit" class="button button-primary">게시하기</button></form></dialog>
       <dialog id="community-alert-dialog" class="forum-dialog" aria-labelledby="community-alert-title"><div class="dialog-heading"><h2 id="community-alert-title">내 글의 새 댓글</h2><button type="button" id="community-alert-close" class="icon-button" aria-label="댓글 알림 닫기">×</button></div><div id="community-alert-list"></div></dialog>
       <noscript><p class="form-feedback">계정 메뉴를 이용하려면 브라우저에서 JavaScript를 허용해 주세요.</p></noscript>
     </main>

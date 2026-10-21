@@ -239,7 +239,7 @@
     const categoryInput = document.getElementById('post-category');
     const choiceInput = document.getElementById('post-choice');
     const editorFeedback = document.getElementById('post-feedback');
-    let selectedBoard = 'community', editorState = null, editorBusy = false;
+    let selectedBoard = 'notices', editorState = null, editorBusy = false;
     const downloadLink = document.getElementById('download-link');
     const adminControls = document.getElementById('admin-controls');
     const registrationSwitch = document.getElementById('registration-switch');
@@ -396,7 +396,7 @@
     }
     for(const button of document.querySelectorAll('[data-board]'))button.addEventListener('click',()=>selectBoard(button.dataset.board));
     document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const boards=['notices','patchnotes','community'],index=boards.indexOf(selectedBoard);selectBoard(event.key==='Home'?boards[0]:event.key==='End'?boards[2]:boards[(index+(event.key==='ArrowRight'?1:2))%3],true);}});
-    selectBoard('community');
+    selectBoard('notices');
     function editorLock(busy){editorBusy=busy;for(const control of editorForm.elements)control.disabled=busy;editorForm.setAttribute('aria-busy',String(busy));}
     function fillEditor(id=''){
       const posts=editorState[categoryInput.value].posts;
