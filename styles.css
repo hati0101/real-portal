@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "A2Z";
+  src: url("./fonts/a2z-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "A2Z";
+  src: url("./fonts/a2z-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 :root {
   color-scheme: dark;
   --background: #0a1b1a;
@@ -14,13 +28,14 @@
   --error: #ffbbb3;
   --error-surface: #352b29;
   --radius: 8px;
-  font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --font-family: "A2Z", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  font-family: var(--font-family);
   font-synthesis: none;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-padding-top: 24px; }
 body { margin: 0; background: var(--background); color: var(--text); font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
-button, input { font: inherit; }
+button, input, textarea, select { font: inherit; }
 button, a, input { -webkit-tap-highlight-color: transparent; }
 button, a { touch-action: manipulation; }
 button { color: inherit; }
@@ -40,7 +55,7 @@ h1, h2, h3, p { margin: 0; }
 .skip-link:focus { transform: translateY(0); }
 .entry-shell { max-width: 1440px; min-height: 100svh; margin: auto; padding: 0 64px; display: flex; flex-direction: column; }
 .site-header { display: flex; align-items: center; min-height: 112px; }
-.wordmark { display: inline-flex; align-items: center; min-height: 44px; font-family: Arial, sans-serif; font-size: 27px; font-weight: 800; letter-spacing: -.9px; line-height: 1; }
+.wordmark { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--font-family); font-size: 27px; font-weight: 800; letter-spacing: -.9px; line-height: 1; }
 .brand-symbol { display: block; position: relative; width: 16px; height: 21px; margin: 0 15px 0 3px; border: 1.8px solid var(--accent); transform: skewY(-27deg); }
 .brand-symbol::after { content: ""; position: absolute; width: 8px; height: 14px; border-left: 1.8px solid var(--accent); border-bottom: 1.8px solid var(--accent); top: 2px; right: -6px; }
 .header-caption { margin-left: auto; font-size: 13px; color: var(--muted); }
@@ -54,7 +69,7 @@ h1, h2, h3, p { margin: 0; }
 .welcome-copy { position: relative; z-index: 1; padding-left: 24px; }
 .eyebrow { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
 .welcome h1 { font-size: clamp(68px, 6.3vw, 94px); letter-spacing: -.07em; line-height: 1.19; font-weight: 500; }
-.welcome h1 > span { font-family: Arial, sans-serif; font-size: 1.25em; line-height: 1.1; font-weight: 700; letter-spacing: -.07em; color: var(--accent); }
+.welcome h1 > span { font-family: var(--font-family); font-size: 1.25em; line-height: 1.1; font-weight: 700; letter-spacing: -.07em; color: var(--accent); }
 .welcome-caption { margin: 54px 0 0 24px; position: relative; color: var(--quiet); font-size: 10px; letter-spacing: .25em; }
 .member-panel { width: 100%; max-width: 458px; padding: 38px 36px 30px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 20px 70px #00000016; }
 .panel-heading .eyebrow { margin-bottom: 9px; }
@@ -100,7 +115,7 @@ h1, h2, h3, p { margin: 0; }
 .field-group input:disabled { opacity: .55; cursor: not-allowed; }
 .notice + .notice { margin-top: 36px; }
 .site-footer { display: flex; justify-content: space-between; gap: 20px; padding: 23px 0 27px; border-top: 1px solid #223b33; color: var(--quiet); font-size: 11px; }
-.site-footer > span:first-child { font-family: Arial, sans-serif; font-weight: 700; letter-spacing: .12em; }
+.site-footer > span:first-child { font-family: var(--font-family); font-weight: 700; letter-spacing: .12em; }
 dialog { color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; width: min(530px, calc(100% - 32px)); max-height: calc(100svh - 40px); box-shadow: 0 24px 100px #0005; }
 dialog::backdrop { background: #020b09c4; }
 .dialog-heading { display: flex; align-items: start; justify-content: space-between; }
@@ -152,7 +167,7 @@ dialog > .button { width: 100%; margin-top: 26px; }
 .install-guide h3 { font-size: 12px; font-weight: 500; }
 .install-guide ol { list-style: none; margin: 15px 0 0; padding: 0; }
 .install-guide li { display: flex; align-items: baseline; gap: 10px; margin: 11px 0 0; color: var(--muted); font-size: 11px; }
-.install-guide li > span { color: var(--accent); font-family: Arial, sans-serif; font-size: 10px; }
+.install-guide li > span { color: var(--accent); font-family: var(--font-family); font-size: 10px; }
 .install-guide strong { font-weight: 600; color: var(--text); }
 .home-footer { margin-top: auto; }
 .admin-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 18px 24px; margin-top: 40px; padding: 22px 0 0; border-top: 1px solid var(--border); }

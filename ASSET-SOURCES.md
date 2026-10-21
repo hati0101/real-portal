@@ -1,5 +1,13 @@
 # Site artwork
 
+## Typeface: A2Z (에이투지)
+
+- Files: `fonts/a2z-regular.woff2` (400), `fonts/a2z-bold.woff2` (700).
+- A2Z version 1.001, copyright © 2026 PT&; Latin design based on Outfit.
+- Official distribution: https://freesentation.blog/a2z
+- Unmodified font files distributed with the copyright notices and SIL Open Font License 1.1 in `fonts/OFL.txt`.
+- Served from this site for the homepage, member forms and development page.
+
 ## Current hero: REAL town at dusk
 
 - File: `real-town-hero.webp` (2172 x 724)
