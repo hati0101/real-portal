@@ -319,7 +319,7 @@
     chatPanel.addEventListener('keydown',event=>{if(event.key==='Escape'){closeChat();chatOpen.focus();}});
     window.addEventListener('message',event=>{
       const frame=chatWrap.querySelector('iframe');
-      if(event.origin==='null'&&event.source===frame?.contentWindow&&event.data?.type==='real-chat-ready'&&chatPayload)frame.contentWindow.postMessage({type:'real-chat-join',payload:chatPayload},'*');
+      if(event.origin==='https://hati0101.github.io'&&event.source===frame?.contentWindow&&event.data?.type==='real-chat-ready'&&chatPayload)frame.contentWindow.postMessage({type:'real-chat-join',payload:chatPayload},'https://hati0101.github.io');
     });
     chatOpen.addEventListener('click',async()=>{
       if(!chatPanel.hidden){closeChat();return;}
@@ -328,7 +328,7 @@
       try{
         const data=await request('/api/chat');if(attempt!==chatAttempt)return;chatPayload=data;
         document.getElementById('chat-nickname').textContent=data.nickname+' · 닉네임은 자동으로 설정됩니다.';
-        const frame=document.createElement('iframe');frame.title='REAL 회원 채팅';frame.setAttribute('sandbox','allow-scripts');frame.referrerPolicy='no-referrer';frame.src='./chat.html';chatWrap.replaceChildren(frame);chatFeedback.textContent='';
+        const frame=document.createElement('iframe');frame.title='REAL 회원 채팅';frame.setAttribute('sandbox','allow-scripts allow-same-origin');frame.referrerPolicy='no-referrer';frame.src='https://hati0101.github.io/real-portal/chat.html';chatWrap.replaceChildren(frame);chatFeedback.textContent='';
         chatTimer=setInterval(async()=>{try{const session=await request('/api/session');if(session.authenticated!==true){closeChat();location.replace('./index.html');}}catch{closeChat();feedback(output,'로그인 상태를 확인하지 못해 채팅 연결을 닫았습니다.');}},60000);
       }catch(error){if(attempt!==chatAttempt)return;chatFeedback.textContent=error.message;if(error.status===401){closeChat();location.replace('./index.html');}}
     });
