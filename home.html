@@ -20,8 +20,7 @@
   <a class="skip-link" href="#home-main">본문으로 건너뛰기</a>
   <div class="home-shell">
     <header class="site-header home-header">
-      <a class="wordmark" href="./home.html" aria-label="REAL 홈페이지"><span class="brand-symbol" aria-hidden="true"></span>REAL</a>
-      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#notices" data-board="patchnotes">패치노트</a><a href="#notices" data-board="community">자유게시판</a><a href="./development.html">개발현황</a></nav>
+      <a class="wordmark" href="#notices" data-board="notices" aria-label="REAL 홈페이지"><span class="brand-symbol" aria-hidden="true"></span>REAL</a>
 
       <div class="account-menu"><span id="account-name" class="account-name">회원</span><button id="logout-button" type="button" class="text-button">로그아웃<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 3H4v14h4m4-11 4 4-4 4m-5-4h9"/></svg></button></div>
     </header>
@@ -37,12 +36,14 @@
       <div id="support-alert" class="support-alert" hidden><span id="support-alert-text" role="status" aria-live="polite"></span><button id="support-alert-open" type="button" class="text-button">확인하기</button></div>
       <div class="home-grid" id="portal-content" hidden>
         <section id="notices" class="notice-section" aria-labelledby="notices-title">
-          <div class="section-heading"><h2 id="notices-title" class="sr-only">공지와 패치노트</h2><div class="board-tabs" role="tablist" aria-label="게시판"><button type="button" id="notices-tab" role="tab" aria-selected="true" aria-controls="notice-list" data-board="notices">공지사항</button><button type="button" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</button><button type="button" id="community-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="community">자유게시판</button></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
+          <div class="section-heading"><h2 id="notices-title" class="sr-only">REAL 게시판</h2><div class="board-tabs" role="tablist" aria-label="게시판"><a href="#notices" id="notices-tab" role="tab" aria-selected="true" aria-controls="notice-list" data-board="notices">공지사항</a><a href="#patchnotes" id="patchnotes-tab" role="tab" aria-selected="false" aria-controls="patchnotes" tabindex="-1" data-board="patchnotes">패치노트</a><a href="#development" id="development-tab" role="tab" aria-selected="false" aria-controls="development" tabindex="-1" data-board="development">개발현황</a><a href="#community" id="community-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="community">자유게시판</a><a href="#support" id="support-tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="community-board" data-board="support">문의·건의</a></div><button id="post-write-button" type="button" class="text-button" hidden>글 작성·관리</button></div>
           <div id="notice-list" class="board-list" role="tabpanel" aria-labelledby="notices-tab" tabindex="0"></div>
           <div id="patchnotes" class="board-list" role="tabpanel" aria-labelledby="patchnotes-tab" tabindex="0" hidden></div>
+          <section id="development" class="development-panel" role="tabpanel" aria-labelledby="development-tab" tabindex="0" hidden><div class="forum-toolbar"><div><h2>개발현황</h2><p>준비하고 있는 기능과 개선 사항입니다.</p></div></div><p id="development-feedback" class="form-note" role="status">공개된 개발 항목을 확인하고 있습니다.</p><p id="development-stamp" class="form-note"></p><ul id="development-list" class="development-list"></ul></section>
           <section id="community-board" hidden role="tabpanel" aria-labelledby="community-tab" tabindex="0">
             <div id="community-pinned" class="forum-pinned" aria-label="고정 공지" hidden></div>
-            <div class="forum-toolbar"><div><h2>자유게시판</h2><p id="community-total">모험가들의 이야기가 모이는 곳</p></div><button id="community-write" type="button" class="button button-primary">새 글 쓰기</button></div>
+            <div class="forum-toolbar"><div><h2 id="community-title">자유게시판</h2><p id="community-total">모험가들의 이야기가 모이는 곳</p></div><button id="community-write" type="button" class="button button-primary">새 글 쓰기</button></div>
+            <p id="community-public-note" class="forum-public-note" hidden>문의와 건의를 함께 나누는 공개 게시판입니다. 글과 댓글은 다른 회원도 볼 수 있습니다.</p>
             <p id="community-feedback" role="status" class="form-note"></p>
             <div class="forum-list-heading" aria-hidden="true"><span>이야기</span><span>모험가</span><span>작성일</span></div>
             <div id="community-list" class="forum-list"></div>
@@ -61,7 +62,7 @@
           <p class="download-source" id="download-source">다운로드 페이지가 새 탭으로 열립니다.</p>
           <details class="install-guide"><summary>처음 오셨나요? 설치 안내</summary><ol><li><span>01</span><p>클라이언트 ZIP 파일을 다운로드합니다.</p></li><li><span>02</span><p>다운로드한 파일의 압축을 해제합니다.</p></li><li><span>03</span><p>폴더 안의 <strong>REAL.exe</strong>를 실행합니다.</p></li></ol></details>
         </section>
-        <section class="forum-shortcuts"><h2>모험가 쉼터</h2><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button><button id="support-open" type="button" class="text-button" aria-haspopup="dialog" disabled>문의·제보<span id="support-badge" class="support-badge" hidden></span></button><button id="community-alert-open" type="button" class="text-button" disabled><span id="community-alert-label">댓글 알림</span><span id="community-badge" class="support-badge" hidden></span></button><a href="./development.html">개발현황 보기 <span aria-hidden="true">↗</span></a></section>
+        <section class="forum-shortcuts"><h2>모험가 쉼터</h2><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button><button id="support-open" type="button" class="text-button" aria-haspopup="dialog" disabled>기존 비공개 문의<span id="support-badge" class="support-badge" hidden></span></button><button id="community-alert-open" type="button" class="text-button" disabled><span id="community-alert-label">댓글 알림</span><span id="community-badge" class="support-badge" hidden></span></button></section>
         <p class="forum-side-note">당신의 다음 모험도<br>REAL과 함께.</p>
         </aside>
       </div>
@@ -71,14 +72,15 @@
         <form id="server-state-form" class="server-state-form" hidden><label for="server-state-mode">홈페이지 서버 상태</label><div><select id="server-state-mode"><option value="auto">자동 (On / Off)</option><option value="on">On</option><option value="off">Off</option><option value="maintenance">점검중</option></select><button type="submit" class="text-button">적용</button></div><p id="server-state-feedback" role="status"></p></form>
         <p id="admin-feedback" class="admin-feedback" role="status" aria-live="polite" hidden></p>
       </section>
-      <section id="chat-panel" class="chat-panel" aria-labelledby="chat-title" hidden>
-        <div class="chat-heading"><div><h2 id="chat-title">REAL 채팅</h2><p id="chat-nickname">캐릭터 닉네임으로 참여합니다.</p></div><button id="chat-close" type="button" class="icon-button" aria-label="채팅창 닫기">×</button></div>
+      <section id="chat-panel" class="chat-panel" role="dialog" aria-modal="false" aria-labelledby="chat-title" hidden>
+        <div class="chat-heading"><div id="chat-drag-handle" class="chat-drag-handle" tabindex="0" aria-label="채팅창 이동. 드래그하거나 방향키로 위치를 옮길 수 있습니다."><h2 id="chat-title">REAL 채팅</h2><p id="chat-nickname">캐릭터 닉네임으로 참여합니다.</p></div><div class="chat-window-actions"><button id="chat-minimize" type="button" class="icon-button" aria-label="채팅창 최소화" title="최소화">−</button><button id="chat-maximize" type="button" class="text-button" aria-label="채팅창 크게 보기" aria-pressed="false">크게</button></div></div>
         <p id="chat-feedback" role="status" class="chat-feedback"></p><div id="chat-frame-wrap"></div>
       </section>
+      <button id="chat-restore" type="button" class="chat-restore button button-primary" aria-controls="chat-panel" aria-expanded="false" hidden>REAL 채팅 열기</button>
       <dialog id="support-dialog" class="support-dialog" aria-labelledby="support-title">
-        <div class="dialog-heading"><div><h2 id="support-title">문의·제보</h2><p id="support-description" class="form-note">문의, 건의, 버그 제보를 남겨 주세요. 작성자와 운영자만 볼 수 있습니다.</p></div><button id="support-close" type="button" class="icon-button" aria-label="문의창 닫기">×</button></div>
+        <div class="dialog-heading"><div><h2 id="support-title">기존 비공개 문의</h2><p id="support-description" class="form-note">이전에 접수한 문의와 답변입니다. 작성자와 운영자만 볼 수 있습니다.</p></div><button id="support-close" type="button" class="icon-button" aria-label="문의창 닫기">×</button></div>
         <p id="support-feedback" class="form-feedback" role="status" tabindex="-1" hidden></p>
-        <div class="support-toolbar"><p id="support-summary" role="status"></p><button id="support-new" type="button" class="button button-primary">새로 접수</button><button id="support-refresh" type="button" class="text-button">새로고침</button></div>
+        <div class="support-toolbar"><p id="support-summary" role="status"></p><button id="support-new" type="button" class="button button-primary">공개 문의·건의로 이동</button><button id="support-refresh" type="button" class="text-button">새로고침</button></div>
         <div class="support-layout">
           <section class="support-inbox" aria-label="접수 목록">
             <div class="support-filters"><label>분류<select id="support-category-filter"><option value="all">전체 분류</option><option value="inquiry">문의</option><option value="suggestion">건의</option><option value="bug">버그 제보</option></select></label><label>상태<select id="support-status-filter"><option value="all">전체 상태</option><option value="new">접수</option><option value="reviewing">확인 중</option><option value="completed">답변 완료</option></select></label></div>
@@ -86,7 +88,7 @@
             <div class="support-pagination"><button id="support-prev" type="button" class="text-button">이전</button><span id="support-page"></span><button id="support-next" type="button" class="text-button">다음</button></div>
           </section>
           <section class="support-content" aria-label="접수 내용">
-            <p id="support-empty" class="form-note">접수 내역을 선택하거나 새 글을 작성해 주세요.</p>
+            <p id="support-empty" class="form-note">이전 접수 내역을 선택해 주세요. 새 문의·건의는 공개 게시판에 작성하실 수 있습니다.</p>
             <form id="support-create" hidden>
               <h3>새 문의·제보</h3><label>분류<select id="support-category" required><option value="inquiry">문의</option><option value="suggestion">건의</option><option value="bug">버그 제보</option></select></label>
               <p id="support-guide" class="form-note">궁금한 점이나 도움이 필요한 내용을 적어 주세요.</p>
@@ -106,7 +108,7 @@
       <dialog id="post-editor" class="post-editor" aria-labelledby="post-editor-title">
         <div class="dialog-heading"><h2 id="post-editor-title">글 작성·수정</h2><button id="post-editor-close" type="button" class="icon-button" aria-label="편집창 닫기">×</button></div>
         <form id="post-editor-form" method="post">
-          <p class="form-note">라운지와 같은 공지를 관리합니다. 제목에 패치·업데이트 또는 REAL 버전을 넣으면 패치노트에 자동 분류됩니다.</p>
+          <p class="form-note">홈페이지의 공지를 관리합니다. 제목에 패치·업데이트 또는 REAL 버전을 넣으면 패치노트에 자동 분류됩니다.</p>
           <div class="editor-row"><label>글 목록<select id="post-category"><option value="notices">공지사항</option><option value="patchnotes">패치노트</option></select></label><label>저장된 글<select id="post-choice"><option value="">새 글 작성</option></select></label></div>
           <label>제목<input id="post-title" type="text" maxlength="160" required></label>
           <div class="editor-row"><label>표시 날짜<input id="post-date" type="date" required></label><label class="editor-pin"><input id="post-pinned" type="checkbox">상단 고정</label></div>
@@ -117,7 +119,7 @@
       </dialog>
 
       <dialog id="community-detail" class="forum-dialog" aria-label="게시글과 댓글"><div class="forum-dialog-top"><span>REAL COMMUNITY</span><button type="button" id="community-detail-close" class="icon-button" aria-label="게시글 닫기">×</button></div><p id="community-detail-feedback" class="form-feedback" role="alert"></p><div id="community-detail-body"></div></dialog>
-      <dialog id="community-editor" class="forum-dialog" aria-labelledby="community-editor-title"><div class="dialog-heading"><h2 id="community-editor-title">새 이야기</h2><button type="button" id="community-editor-close" class="icon-button" aria-label="글쓰기 닫기">×</button></div><form id="community-form"><p class="form-note">로그인한 회원들이 볼 수 있습니다. 개인 문의는 ‘문의·제보’를 이용해 주세요.</p><label>제목<input id="community-subject" required minlength="2" maxlength="100" placeholder="어떤 이야기를 나눌까요?"></label><label>내용<textarea id="community-body" required maxlength="10000" rows="10" placeholder="모험가들과 나눌 이야기를 적어 주세요."></textarea></label><div id="community-images" class="image-picker"></div><p id="community-editor-feedback" class="form-feedback" role="status"></p><button type="submit" class="button button-primary">게시하기</button></form></dialog>
+      <dialog id="community-editor" class="forum-dialog" aria-labelledby="community-editor-title"><div class="dialog-heading"><h2 id="community-editor-title">새 이야기</h2><button type="button" id="community-editor-close" class="icon-button" aria-label="글쓰기 닫기">×</button></div><form id="community-form"><p id="community-editor-note" class="form-note">로그인한 회원들이 글과 댓글을 볼 수 있습니다.</p><label>제목<input id="community-subject" required minlength="2" maxlength="100" placeholder="어떤 이야기를 나눌까요?"></label><label>내용<textarea id="community-body" required maxlength="10000" rows="10" placeholder="모험가들과 나눌 이야기를 적어 주세요."></textarea></label><div id="community-images" class="image-picker"></div><p id="community-editor-feedback" class="form-feedback" role="status"></p><button type="submit" class="button button-primary">게시하기</button></form></dialog>
       <dialog id="community-alert-dialog" class="forum-dialog" aria-labelledby="community-alert-title"><div class="dialog-heading"><h2 id="community-alert-title">내 글의 새 댓글</h2><button type="button" id="community-alert-close" class="icon-button" aria-label="댓글 알림 닫기">×</button></div><div id="community-alert-list"></div></dialog>
       <noscript><p class="form-feedback">계정 메뉴를 이용하려면 브라우저에서 JavaScript를 허용해 주세요.</p></noscript>
     </main>

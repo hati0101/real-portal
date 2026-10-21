@@ -225,7 +225,7 @@
     }
   }
 
-  if (page === 'development' && apiBase) window.RealPortalInfo.initDevelopment({request});
+  if (page === 'development') location.replace('./home.html#development');
 
   if (page === 'home') {
     const output = document.getElementById('home-feedback');
@@ -248,7 +248,8 @@
     let registrationOpen = false;
     const support=window.RealSupport.init({request});
     const serverInfo=window.RealPortalInfo.init({request});
-    const community=window.RealCommunity.init({request});
+    const community=window.RealCommunity.init({request,navigate:category=>selectBoard(category)});
+    const development=window.RealPortalInfo.initDevelopment({request});
     logout.disabled = true;
 
     function clearPortal() {
@@ -262,7 +263,7 @@
       document.getElementById('download-size').textContent = '';
     }
 
-    function renderPosts(list, posts, category) {
+    function renderPosts(list, posts, category, unavailable=false) {
       list.replaceChildren();
       const ordered = [...posts].sort((a,b) => Number(b.pinned)-Number(a.pinned)||b.date.localeCompare(a.date)||b.title.localeCompare(a.title,'ko',{numeric:true}));
       for (const [index, notice] of ordered.entries()) {
@@ -297,7 +298,7 @@
       if (!list.childElementCount) {
         const empty = document.createElement('p');
         empty.className = 'notice-body';
-        empty.textContent = category === 'patchnotes' ? '등록된 패치노트가 없습니다.' : '등록된 공지가 없습니다.';
+        empty.textContent = unavailable ? '공지 서버에 연결하지 못했습니다. 잠시 후 다시 확인해 주세요.' : category === 'patchnotes' ? '등록된 패치노트가 없습니다.' : '등록된 공지가 없습니다.';
         list.append(empty);
       }
     }
@@ -307,12 +308,12 @@
       const downloadUrl = new URL(portal.download.url);
       if (downloadUrl.protocol !== 'https:' || downloadUrl.username || downloadUrl.password) throw new Error('다운로드 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.');
       clearPortal();
-      renderPosts(notices,portal.notices,'notices');
+      renderPosts(notices,portal.notices,'notices',portal.noticesUnavailable);
       const pinned=document.getElementById('community-pinned');pinned.replaceChildren();
       for(const notice of portal.notices.filter(p=>p.pinned).slice(0,3)){const row=document.createElement('button');row.type='button';row.className='forum-pinned-row';const label=document.createElement('span');label.textContent='공지';const title=document.createElement('span');title.textContent=notice.title;row.append(label,title);row.addEventListener('click',()=>{selectBoard('notices');const item=[...notices.querySelectorAll('details')].find(el=>el.querySelector('h3')?.textContent===notice.title);if(item){item.open=true;item.scrollIntoView({block:'nearest'});}});pinned.append(row);}pinned.hidden=!pinned.childElementCount;
-      renderPosts(patchNotes,Array.isArray(portal.patchNotes)?portal.patchNotes:[],'patchnotes');
+      renderPosts(patchNotes,Array.isArray(portal.patchNotes)?portal.patchNotes:[],'patchnotes',portal.noticesUnavailable);
       document.getElementById('account-name').textContent = typeof portal.profile?.nickname === 'string' ? portal.profile.nickname : '회원';
-      writeButton.hidden = !isAdmin || selectedBoard === 'community';
+      writeButton.hidden = !isAdmin || !['notices','patchnotes'].includes(selectedBoard);
       downloadLink.href = downloadUrl.href;
       document.getElementById('download-filename').textContent = typeof portal.download.fileName === 'string' ? portal.download.fileName : '클라이언트 설치 파일';
       document.getElementById('download-size').textContent = typeof portal.download.sizeLabel === 'string' ? portal.download.sizeLabel : '';
@@ -321,30 +322,45 @@
     }
 
     const chatOpen=document.getElementById('chat-open'),chatPanel=document.getElementById('chat-panel'),chatWrap=document.getElementById('chat-frame-wrap'),chatFeedback=document.getElementById('chat-feedback');
-    let chatPayload=null,chatTimer=null,chatAttempt=0;
-    function closeChat(){chatAttempt++;chatPayload=null;clearInterval(chatTimer);chatTimer=null;chatWrap.replaceChildren();chatPanel.hidden=true;chatOpen.setAttribute('aria-expanded','false');}
-    document.getElementById('chat-close').addEventListener('click',()=>{closeChat();chatOpen.focus();});
-    chatPanel.addEventListener('keydown',event=>{if(event.key==='Escape'){closeChat();chatOpen.focus();}});
+    const chatHandle=document.getElementById('chat-drag-handle'),chatRestore=document.getElementById('chat-restore'),chatMaximize=document.getElementById('chat-maximize');
+    let chatPayload=null,chatTimer=null,chatAttempt=0,chatConnecting=false,chatPosition=null,chatDrag=null,chatMaximized=false;
+    function stopChatDrag(){const drag=chatDrag;chatDrag=null;if(drag&&chatHandle.hasPointerCapture(drag.id))chatHandle.releasePointerCapture(drag.id);chatPanel.classList.remove('is-dragging');}
+    function placeChat(x,y){if(chatMaximized||chatPanel.hidden||window.innerWidth<=760)return;const rect=chatPanel.getBoundingClientRect();chatPosition={x:Math.max(12,Math.min(x,window.innerWidth-rect.width-12)),y:Math.max(12,Math.min(y,window.innerHeight-rect.height-12))};chatPanel.style.left=chatPosition.x+'px';chatPanel.style.top=chatPosition.y+'px';chatPanel.style.right='auto';chatPanel.style.bottom='auto';}
+    function fitChat(){if(window.innerWidth<=760){chatPanel.style.left='';chatPanel.style.top='';chatPanel.style.right='';chatPanel.style.bottom='';}else if(chatPosition)placeChat(chatPosition.x,chatPosition.y);}
+    function closeChat(){stopChatDrag();chatAttempt++;chatPayload=null;chatConnecting=false;clearInterval(chatTimer);chatTimer=null;chatWrap.replaceChildren();chatPanel.hidden=true;chatRestore.hidden=true;chatOpen.setAttribute('aria-expanded','false');}
+    function minimizeChat(){stopChatDrag();chatPanel.hidden=true;chatRestore.hidden=false;chatOpen.setAttribute('aria-expanded','false');chatRestore.focus();}
+    document.getElementById('chat-minimize').addEventListener('click',minimizeChat);
+    chatPanel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();minimizeChat();}});
+    chatMaximize.addEventListener('click',()=>{stopChatDrag();chatMaximized=!chatMaximized;chatPanel.classList.toggle('is-maximized',chatMaximized);chatMaximize.textContent=chatMaximized?'이전 크기':'크게';chatMaximize.setAttribute('aria-label',chatMaximized?'채팅창 이전 크기로 보기':'채팅창 크게 보기');chatMaximize.setAttribute('aria-pressed',String(chatMaximized));if(chatMaximized){chatPanel.style.left='';chatPanel.style.top='';chatPanel.style.right='';chatPanel.style.bottom='';}else fitChat();});
+    chatHandle.addEventListener('pointerdown',event=>{if(event.button!==0||!event.isPrimary||chatMaximized||window.innerWidth<=760)return;event.preventDefault();const rect=chatPanel.getBoundingClientRect();chatDrag={id:event.pointerId,x:event.clientX,y:event.clientY,left:rect.left,top:rect.top};chatHandle.setPointerCapture(event.pointerId);chatPanel.classList.add('is-dragging');chatHandle.focus();});
+    chatHandle.addEventListener('pointermove',event=>{if(chatDrag?.id===event.pointerId)placeChat(chatDrag.left+event.clientX-chatDrag.x,chatDrag.top+event.clientY-chatDrag.y);});
+    for(const type of ['pointerup','pointercancel','lostpointercapture'])chatHandle.addEventListener(type,stopChatDrag);
+    chatHandle.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)||chatMaximized||window.innerWidth<=760)return;event.preventDefault();const rect=chatPanel.getBoundingClientRect(),step=event.shiftKey?5:20;placeChat(rect.left+(event.key==='ArrowRight'?step:event.key==='ArrowLeft'?-step:0),rect.top+(event.key==='ArrowDown'?step:event.key==='ArrowUp'?-step:0));});
+    window.addEventListener('resize',()=>{stopChatDrag();fitChat();});
     window.addEventListener('message',event=>{
       const frame=chatWrap.querySelector('iframe');
       if(event.origin==='https://hati0101.github.io'&&event.source===frame?.contentWindow&&event.data?.type==='real-chat-ready'&&chatPayload)frame.contentWindow.postMessage({type:'real-chat-join',payload:chatPayload},'https://hati0101.github.io');
     });
-    chatOpen.addEventListener('click',async()=>{
-      if(!chatPanel.hidden){closeChat();return;}
-      const attempt=++chatAttempt;chatPanel.hidden=false;chatOpen.setAttribute('aria-expanded','true');chatFeedback.textContent='채팅에 연결하고 있습니다.';
-      document.getElementById('chat-close').focus();
+    async function showChat(focus=false){
+      if(chatOpen.disabled)return;
+      chatPanel.hidden=false;chatRestore.hidden=true;chatOpen.setAttribute('aria-expanded','true');fitChat();if(focus)chatHandle.focus();
+      if(chatPayload||chatConnecting)return;
+      const attempt=++chatAttempt;chatConnecting=true;chatFeedback.textContent='채팅에 연결하고 있습니다.';
       try{
         const data=await request('/api/chat');if(attempt!==chatAttempt)return;chatPayload=data;
         document.getElementById('chat-nickname').textContent=data.nickname+' · 닉네임은 자동으로 설정됩니다.';
         const frame=document.createElement('iframe');frame.title='REAL 회원 채팅';frame.setAttribute('sandbox','allow-scripts allow-same-origin');frame.referrerPolicy='no-referrer';frame.src='https://hati0101.github.io/real-portal/chat.html';chatWrap.replaceChildren(frame);chatFeedback.textContent='';
-        chatTimer=setInterval(async()=>{try{const session=await request('/api/session');if(session.authenticated!==true){closeChat();location.replace('./index.html');}}catch{closeChat();feedback(output,'로그인 상태를 확인하지 못해 채팅 연결을 닫았습니다.');}},60000);
+        chatTimer=setInterval(async()=>{try{const session=await request('/api/session');if(attempt!==chatAttempt)return;if(session.authenticated!==true){closeChat();location.replace('./index.html');}else chatFeedback.textContent='';}catch(error){if(attempt!==chatAttempt)return;if(error.status===401){closeChat();location.replace('./index.html');}else chatFeedback.textContent='로그인 상태를 다시 확인하고 있습니다.';}},60000);
       }catch(error){if(attempt!==chatAttempt)return;chatFeedback.textContent=error.message;if(error.status===401){closeChat();location.replace('./index.html');}}
-    });
+      finally{if(attempt===chatAttempt)chatConnecting=false;}
+    }
+    chatOpen.addEventListener('click',()=>showChat(true));chatRestore.addEventListener('click',()=>showChat(true));
 
     async function loadPortal() {
       community.clear();
       support.clear();
       serverInfo.clear();
+      development.clear();
       closeChat();chatOpen.disabled=true;
       clearPortal();
       adminControls.hidden = true;
@@ -363,7 +379,9 @@
         const portal = await request('/api/portal');
         renderPortal(portal);
         chatOpen.disabled=false;
+        showChat();
         community.enable();
+        development.enable();
         support.enable(isAdmin);
         serverInfo.enable(isAdmin);
         apiStatus.hidden = true;
@@ -386,17 +404,25 @@
       }
     }
 
-    function selectBoard(category, focus=false) {
+    const boards=['notices','patchnotes','development','community','support'];
+    function selectBoard(category, focus=false, updateHistory=true) {
+      if(!boards.includes(category))return;
       selectedBoard = category;
       notices.hidden = category !== 'notices';patchNotes.hidden = category !== 'patchnotes';
-      document.getElementById('community-board').hidden = category !== 'community';
-      writeButton.hidden = !isAdmin || category === 'community';
-      for(const link of document.querySelectorAll('.home-nav [data-board]'))link.classList.toggle('is-active',link.dataset.board===category);
+      document.getElementById('development').hidden = category !== 'development';
+      document.getElementById('community-board').hidden = !['community','support'].includes(category);
+      community.selectBoard(category);
+      writeButton.hidden = !isAdmin || !['notices','patchnotes'].includes(category);
       for(const tab of document.querySelectorAll('.board-tabs [role="tab"]')){const active=tab.dataset.board===category;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;if(active&&focus)tab.focus();}
+      if(updateHistory&&location.hash!=='#'+category)history.pushState(null,'','#'+category);
     }
-    for(const button of document.querySelectorAll('[data-board]'))button.addEventListener('click',()=>selectBoard(button.dataset.board));
-    document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const boards=['notices','patchnotes','community'],index=boards.indexOf(selectedBoard);selectBoard(event.key==='Home'?boards[0]:event.key==='End'?boards[2]:boards[(index+(event.key==='ArrowRight'?1:2))%3],true);}});
-    selectBoard('notices');
+    for(const link of document.querySelectorAll('[data-board]'))link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button>0)return;event.preventDefault();selectBoard(link.dataset.board);});
+    document.querySelector('.board-tabs').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const index=boards.indexOf(selectedBoard);selectBoard(event.key==='Home'?boards[0]:event.key==='End'?boards[boards.length-1]:boards[(index+(event.key==='ArrowRight'?1:boards.length-1))%boards.length],true);}else if(event.key===' '&&event.target.matches('[role="tab"]')){event.preventDefault();selectBoard(event.target.dataset.board,true);}});
+    function restoreBoard(){const category=location.hash.slice(1);if(boards.includes(category))selectBoard(category,false,false);else if(!location.hash)selectBoard('notices',false,false);}
+    window.addEventListener('hashchange',restoreBoard);
+    window.addEventListener('popstate',restoreBoard);
+    selectBoard(boards.includes(location.hash.slice(1))?location.hash.slice(1):'notices',false,false);
+    if(!location.hash)history.replaceState(null,'','#notices');
     function editorLock(busy){editorBusy=busy;for(const control of editorForm.elements)control.disabled=busy;editorForm.setAttribute('aria-busy',String(busy));}
     function fillEditor(id=''){
       const posts=editorState[categoryInput.value].posts;
@@ -427,7 +453,7 @@
       const category=categoryInput.value,action=event.submitter?.dataset.action||'publish';
       const payload={category,revision:editorState[category].revision,id:choiceInput.value||undefined,action,post:{title:document.getElementById('post-title').value,body:document.getElementById('post-body').value,date:document.getElementById('post-date').value,pinned:document.getElementById('post-pinned').checked}};
       editorLock(true);feedback(editorFeedback,'저장하고 있습니다.');
-      try{const saved=await request('/api/post-save',payload);editorState=saved;categoryInput.value=saved.category;fillEditor(saved.id);renderPortal(await request('/api/portal'));feedback(editorFeedback,action==='draft'?'초안을 저장했습니다. 회원에게는 게시되지 않습니다.':action==='unpublish'?'라운지와 홈페이지에서 게시를 내렸습니다.':'라운지와 홈페이지에 게시했습니다.',true);}
+      try{const saved=await request('/api/post-save',payload);editorState=saved;categoryInput.value=saved.category;fillEditor(saved.id);renderPortal(await request('/api/portal'));feedback(editorFeedback,action==='draft'?'초안을 저장했습니다. 회원에게는 게시되지 않습니다.':action==='unpublish'?'홈페이지에서 게시를 내렸습니다.':'홈페이지에 게시했습니다.',true);}
       catch(error){feedback(editorFeedback,error.message);}
       finally{editorLock(false);}
     });
@@ -438,6 +464,7 @@
     });
     window.addEventListener('pagehide', () => {
       community.clear();
+      development.clear();
       support.clear();
       serverInfo.clear();
       closeChat();
@@ -487,7 +514,7 @@
       feedback(output, '');
       try {
         await request('/api/logout', {});
-        community.clear();support.clear();serverInfo.clear();
+        community.clear();support.clear();serverInfo.clear();development.clear();
         closeChat();
         clearPortal();
         location.assign('./index.html');
