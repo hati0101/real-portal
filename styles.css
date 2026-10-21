@@ -428,3 +428,30 @@ dialog > .button { width: 100%; margin-top: 26px; }
 #chat-frame-wrap { flex: 1; min-height: 0; }
 #chat-frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
 @media (max-width: 760px) { .home-nav { gap: 14px; flex-wrap: wrap; } .chat-panel { bottom: 12px; height: calc(100dvh - 24px); } }
+.support-badge { display: inline-grid; place-items: center; margin-left: 6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 10px; background: var(--accent); color: var(--bg); font-size: 11px; }
+.support-badge[hidden] { display: none; }
+.support-dialog { width: min(1080px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 26px; }
+.support-dialog .dialog-heading { align-items: flex-start; }
+.support-dialog .form-note { line-height: 1.65; }
+.support-toolbar { display: flex; align-items: center; gap: 14px; margin: 18px 0; }
+.support-toolbar > p { margin-right: auto; color: var(--muted); font-size: 13px; }
+.support-dialog .button { min-height: 42px; padding: 10px 16px; font-size: 14px; }
+.support-layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 26px; min-height: 320px; }
+.support-inbox { display: flex; flex-direction: column; min-height: 0; }
+.support-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.support-dialog label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+.support-dialog input, .support-dialog select, .support-dialog textarea { display: block; width: 100%; min-height: 42px; margin-top: 6px; border: 1px solid var(--border); border-radius: 6px; background: var(--input); color: var(--text); padding: 10px 12px; font: inherit; font-size: 14px; }
+.support-dialog textarea { resize: vertical; min-height: 140px; max-height: 35dvh; line-height: 1.7; }
+.support-list { overflow-y: auto; max-height: 45dvh; scrollbar-width: thin; padding-right: 6px; }
+.support-ticket { display: flex; flex-direction: column; gap: 7px; width: 100%; padding: 15px 12px; text-align: left; background: transparent; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 11px; }
+.support-ticket strong { color: var(--text); font-size: 14px; overflow-wrap: anywhere; }
+.support-ticket[aria-pressed="true"], .support-ticket:hover { background: var(--surface-raised); }
+.support-ticket-meta { color: var(--accent); }
+.support-pagination { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; margin-top: 8px; color: var(--muted); }
+.support-content { max-height: 61dvh; overflow-y: auto; padding-right: 10px; scrollbar-width: thin; overflow-wrap: anywhere; }
+.support-content h3 { margin: 0 0 18px; font-size: 22px; }
+.support-content h4 { margin: 0 0 14px; font-size: 16px; }
+.support-message { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; font-size: 14px; }
+.support-answer, #support-manage { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+@media (max-width: 760px) { .support-dialog { padding: 18px; } .support-layout { grid-template-columns: minmax(0,1fr); gap: 18px; } .support-toolbar { flex-wrap: wrap; } .support-toolbar > p { width: 100%; } .support-list { max-height: 23dvh; } .support-content { max-height: none; overflow: visible; } .support-dialog input, .support-dialog textarea, .support-dialog select { font-size: 16px; } }
+@media (min-width: 761px) { .support-dialog[open] { display: flex; flex-direction: column; height: min(800px, calc(100dvh - 24px)); overflow: hidden; } .support-dialog > .dialog-heading, .support-dialog > .form-feedback, .support-toolbar { flex-shrink: 0; } .support-layout { flex: 1; min-height: 0; } .support-list { flex: 1; min-height: 0; max-height: none; } .support-content { height: 100%; max-height: none; } .support-pagination { flex-shrink: 0; } }

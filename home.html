@@ -9,6 +9,7 @@
   <title>홈 · REAL</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./config.js" defer></script>
+  <script src="./support.js" defer></script>
   <script src="./app.js" defer></script>
 </head>
 <body data-page="home">
@@ -16,7 +17,7 @@
   <div class="home-shell">
     <header class="site-header home-header">
       <a class="wordmark" href="./home.html" aria-label="REAL 홈페이지"><span class="brand-symbol" aria-hidden="true"></span>REAL</a>
-      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#patchnotes" data-board="patchnotes">패치노트</a><a href="#download">다운로드</a><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button></nav>
+      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#patchnotes" data-board="patchnotes">패치노트</a><a href="#download">다운로드</a><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button><button id="support-open" type="button" class="text-button" aria-haspopup="dialog" disabled>문의·제보<span id="support-badge" class="support-badge" hidden></span></button></nav>
       <div class="account-menu"><span id="account-name" class="account-name">회원</span><button id="logout-button" type="button" class="text-button">로그아웃<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 3H4v14h4m4-11 4 4-4 4m-5-4h9"/></svg></button></div>
     </header>
 
@@ -54,6 +55,34 @@
         <div class="chat-heading"><div><h2 id="chat-title">REAL 채팅</h2><p id="chat-nickname">캐릭터 닉네임으로 참여합니다.</p></div><button id="chat-close" type="button" class="icon-button" aria-label="채팅창 닫기">×</button></div>
         <p id="chat-feedback" role="status" class="chat-feedback"></p><div id="chat-frame-wrap"></div>
       </section>
+      <dialog id="support-dialog" class="support-dialog" aria-labelledby="support-title">
+        <div class="dialog-heading"><div><h2 id="support-title">문의·제보</h2><p id="support-description" class="form-note">문의, 건의, 버그 제보를 남겨 주세요. 작성자와 운영자만 볼 수 있습니다.</p></div><button id="support-close" type="button" class="icon-button" aria-label="문의창 닫기">×</button></div>
+        <p id="support-feedback" class="form-feedback" role="status" tabindex="-1" hidden></p>
+        <div class="support-toolbar"><p id="support-summary" role="status"></p><button id="support-new" type="button" class="button button-primary">새로 접수</button><button id="support-refresh" type="button" class="text-button">새로고침</button></div>
+        <div class="support-layout">
+          <section class="support-inbox" aria-label="접수 목록">
+            <div class="support-filters"><label>분류<select id="support-category-filter"><option value="all">전체 분류</option><option value="inquiry">문의</option><option value="suggestion">건의</option><option value="bug">버그 제보</option></select></label><label>상태<select id="support-status-filter"><option value="all">전체 상태</option><option value="new">접수</option><option value="reviewing">확인 중</option><option value="completed">답변 완료</option></select></label></div>
+            <div id="support-list" class="support-list" aria-live="polite"></div>
+            <div class="support-pagination"><button id="support-prev" type="button" class="text-button">이전</button><span id="support-page"></span><button id="support-next" type="button" class="text-button">다음</button></div>
+          </section>
+          <section class="support-content" aria-label="접수 내용">
+            <p id="support-empty" class="form-note">접수 내역을 선택하거나 새 글을 작성해 주세요.</p>
+            <form id="support-create" hidden>
+              <h3>새 문의·제보</h3><label>분류<select id="support-category" required><option value="inquiry">문의</option><option value="suggestion">건의</option><option value="bug">버그 제보</option></select></label>
+              <p id="support-guide" class="form-note">궁금한 점이나 도움이 필요한 내용을 적어 주세요.</p>
+              <label>제목<input id="support-subject" type="text" minlength="2" maxlength="100" required placeholder="내용을 한 줄로 요약해 주세요"></label>
+              <label>내용<textarea id="support-body" rows="9" minlength="5" maxlength="5000" required placeholder="상황과 내용을 자세히 적어 주세요"></textarea></label>
+              <p class="form-note">비밀번호는 적지 마세요. 접수는 30초 간격으로, 최근 24시간 동안 5건까지 가능합니다.</p>
+              <button type="submit" class="button button-primary">접수하기</button>
+            </form>
+            <article id="support-detail" hidden>
+              <p id="support-detail-meta" class="form-note"></p><h3 id="support-detail-title"></h3><p id="support-detail-author" class="form-note"></p><div id="support-detail-body" class="support-message"></div>
+              <section id="support-answer" class="support-answer"><h4>운영자 답변</h4><p id="support-answer-body" class="support-message"></p></section>
+              <form id="support-manage" hidden><h4>접수 처리</h4><label>처리 상태<select id="support-state"><option value="new">접수</option><option value="reviewing">확인 중</option><option value="completed">답변 완료</option></select></label><label>작성자에게 표시할 답변<textarea id="support-reply" rows="6" maxlength="5000" placeholder="처리 결과나 안내를 남겨 주세요"></textarea></label><button type="submit" class="button button-primary">처리 내용 저장</button></form>
+            </article>
+          </section>
+        </div>
+      </dialog>
       <dialog id="post-editor" class="post-editor" aria-labelledby="post-editor-title">
         <div class="dialog-heading"><h2 id="post-editor-title">글 작성·수정</h2><button id="post-editor-close" type="button" class="icon-button" aria-label="편집창 닫기">×</button></div>
         <form id="post-editor-form" method="post">

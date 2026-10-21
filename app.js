@@ -244,6 +244,7 @@
     const adminFeedback = document.getElementById('admin-feedback');
     let isAdmin = false;
     let registrationOpen = false;
+    const support=window.RealSupport.init({request});
     logout.disabled = true;
 
     function clearPortal() {
@@ -334,6 +335,7 @@
     });
 
     async function loadPortal() {
+      support.clear();
       closeChat();chatOpen.disabled=true;
       clearPortal();
       adminControls.hidden = true;
@@ -352,6 +354,7 @@
         const portal = await request('/api/portal');
         renderPortal(portal);
         chatOpen.disabled=false;
+        support.enable(isAdmin);
         apiStatus.hidden = true;
         isAdmin = session.user?.isAdmin === true;
         if (isAdmin) {
@@ -419,6 +422,7 @@
       if (event.persisted && apiBase) loadPortal();
     });
     window.addEventListener('pagehide', () => {
+      support.clear();
       closeChat();
       clearPortal();
       adminControls.hidden = true;
