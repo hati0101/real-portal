@@ -372,7 +372,7 @@
     async function openEditor(category=selectedBoard,id=''){
       if(!isAdmin||editorBusy)return;
       editor.showModal();editorLock(true);feedback(editorFeedback,'글 목록을 불러오고 있습니다.');
-      try{editorState=await request('/api/post-list');categoryInput.value=category;fillEditor(id);feedback(editorFeedback,'');}
+      try{editorState=await request('/api/post-list');categoryInput.value=id?Object.keys(editorState).find(key=>editorState[key].posts.some(post=>post.id===id))||category:category;fillEditor(id);feedback(editorFeedback,'');}
       catch(error){feedback(editorFeedback,error.message);editorState=null;}
       finally{editorLock(false);if(!editorState)for(const button of editorForm.querySelectorAll('[type="submit"]'))button.disabled=true;}
     }
