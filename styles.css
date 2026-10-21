@@ -461,3 +461,22 @@ dialog > .button { width: 100%; margin-top: 26px; }
 .support-ticket.is-unread { border-left: 3px solid var(--accent); background: var(--surface-raised); }
 .support-actions { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
 .support-delete { color: #ffb4b4; }
+
+.server-status-panel { min-width: 250px; padding: 16px 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.server-status-values { display: flex; gap: 26px; color: var(--muted); font-size: 13px; }
+.server-status-values strong { display: block; margin-top: 4px; font-size: 23px; color: var(--text); }
+.server-status-panel[data-state="on"] #server-state-value { color: var(--accent); }
+.server-status-panel[data-state="off"] #server-state-value { color: #ffb4b4; }
+.server-status-panel[data-state="maintenance"] #server-state-value { color: #f0cc8d; }
+.server-status-panel p { margin: 8px 0 0; font-size: 11px; color: var(--muted); }
+.server-state-form { margin-left: 20px; font-size: 12px; color: var(--muted); }
+.server-state-form > div { display: flex; gap: 12px; margin-top: 4px; }
+.server-state-form select { color: var(--text); background: var(--input); border: 1px solid var(--border); border-radius: 5px; padding: 5px; font: inherit; }
+.server-state-form p { max-width: 260px; margin: 4px 0 0; }
+.development-main { flex: 1; min-height: 0; overflow-y: auto; padding: 30px 0; }
+.development-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 24px; }
+.development-heading h1 { font-size: 32px; margin: 0 0 8px; }
+.development-heading p { color: var(--muted); }
+.development-list { list-style: none; padding: 0; margin: 24px 0; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 32px; }
+.development-list li { padding: 17px 4px; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+@media(max-width:760px) { .home-intro { flex-wrap: wrap; gap: 16px; } .server-status-panel { width: 100%; } .server-state-form { margin: 12px 0 0; width: 100%; } .server-state-form select { font-size: 16px; } .development-list { grid-template-columns: 1fr; } .development-main { overflow: visible; } }

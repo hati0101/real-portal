@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./styles.css">
   <script src="./config.js" defer></script>
   <script src="./support.js" defer></script>
+  <script src="./portal-info.js" defer></script>
   <script src="./app.js" defer></script>
 </head>
 <body data-page="home">
@@ -17,14 +18,14 @@
   <div class="home-shell">
     <header class="site-header home-header">
       <a class="wordmark" href="./home.html" aria-label="REAL 홈페이지"><span class="brand-symbol" aria-hidden="true"></span>REAL</a>
-      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#patchnotes" data-board="patchnotes">패치노트</a><a href="#download">다운로드</a><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button><button id="support-open" type="button" class="text-button" aria-haspopup="dialog" disabled>문의·제보<span id="support-badge" class="support-badge" hidden></span></button></nav>
+      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#patchnotes" data-board="patchnotes">패치노트</a><a href="#download">다운로드</a><a href="./development.html">개발현황</a><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button><button id="support-open" type="button" class="text-button" aria-haspopup="dialog" disabled>문의·제보<span id="support-badge" class="support-badge" hidden></span></button></nav>
       <div class="account-menu"><span id="account-name" class="account-name">회원</span><button id="logout-button" type="button" class="text-button">로그아웃<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 3H4v14h4m4-11 4 4-4 4m-5-4h9"/></svg></button></div>
     </header>
 
     <main id="home-main" class="home-main">
       <section class="home-intro" aria-labelledby="home-title">
         <div><p class="eyebrow">REAL SERVER</p><h1 id="home-title">다시 만나 반갑습니다<span>.</span></h1><p>새로운 소식을 확인하고, 모험을 이어가세요.</p></div>
-        <svg class="home-motif" viewBox="0 0 160 160" fill="none" aria-hidden="true"><path d="m80 5 75 75-75 75L5 80Z"/><path d="m80 32 48 48-48 48-48-48Z"/><circle cx="80" cy="80" r="64"/><path d="M80 5v150M5 80h150"/></svg>
+        <section id="server-status-panel" class="server-status-panel" aria-label="서버 현황" hidden><div class="server-status-values"><span>서버 <strong id="server-state-value">확인 중</strong></span><span>접속자 <strong id="server-online-count">집계 대기</strong></span></div><p id="server-checked-at">1분마다 갱신</p></section>
       </section>
 
       <p class="connection-notice" id="api-status" role="status">로그인 상태를 확인하고 있습니다.</p>
@@ -50,6 +51,7 @@
       <section id="admin-controls" class="admin-controls" aria-labelledby="admin-title" hidden>
         <div><h2 id="admin-title">운영 관리</h2><p>새 계정의 가입 접수를 설정합니다.</p></div>
         <label class="registration-switch" for="registration-switch"><span>신규 가입 접수</span><input id="registration-switch" type="checkbox" role="switch" disabled><span class="switch-track" aria-hidden="true"></span><span id="registration-switch-label">닫힘</span></label>
+        <form id="server-state-form" class="server-state-form" hidden><label for="server-state-mode">홈페이지 서버 상태</label><div><select id="server-state-mode"><option value="auto">자동 (On / Off)</option><option value="on">On</option><option value="off">Off</option><option value="maintenance">점검중</option></select><button type="submit" class="text-button">적용</button></div><p id="server-state-feedback" role="status"></p></form>
         <p id="admin-feedback" class="admin-feedback" role="status" aria-live="polite" hidden></p>
       </section>
       <section id="chat-panel" class="chat-panel" aria-labelledby="chat-title" hidden>

@@ -225,6 +225,8 @@
     }
   }
 
+  if (page === 'development' && apiBase) window.RealPortalInfo.initDevelopment({request});
+
   if (page === 'home') {
     const output = document.getElementById('home-feedback');
     const logout = document.getElementById('logout-button');
@@ -245,6 +247,7 @@
     let isAdmin = false;
     let registrationOpen = false;
     const support=window.RealSupport.init({request});
+    const serverInfo=window.RealPortalInfo.init({request});
     logout.disabled = true;
 
     function clearPortal() {
@@ -336,6 +339,7 @@
 
     async function loadPortal() {
       support.clear();
+      serverInfo.clear();
       closeChat();chatOpen.disabled=true;
       clearPortal();
       adminControls.hidden = true;
@@ -355,6 +359,7 @@
         renderPortal(portal);
         chatOpen.disabled=false;
         support.enable(isAdmin);
+        serverInfo.enable(isAdmin);
         apiStatus.hidden = true;
         isAdmin = session.user?.isAdmin === true;
         if (isAdmin) {
@@ -423,6 +428,7 @@
     });
     window.addEventListener('pagehide', () => {
       support.clear();
+      serverInfo.clear();
       closeChat();
       clearPortal();
       adminControls.hidden = true;
