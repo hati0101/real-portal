@@ -428,7 +428,7 @@ dialog > .button { width: 100%; margin-top: 26px; }
 #chat-frame-wrap { flex: 1; min-height: 0; }
 #chat-frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
 @media (max-width: 760px) { .home-nav { gap: 14px; flex-wrap: wrap; } .chat-panel { bottom: 12px; height: calc(100dvh - 24px); } }
-.support-badge { display: inline-grid; place-items: center; margin-left: 6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 10px; background: var(--accent); color: var(--bg); font-size: 11px; }
+.support-badge { display: inline-grid; place-items: center; margin-left: 6px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-size: 11px; }
 .support-badge[hidden] { display: none; }
 .support-dialog { width: min(1080px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 26px; }
 .support-dialog .dialog-heading { align-items: flex-start; }
