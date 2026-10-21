@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex, nofollow">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://222.103.200.184; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://222.103.200.184; frame-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
   <title>홈 · REAL</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./config.js" defer></script>
@@ -16,7 +16,7 @@
   <div class="home-shell">
     <header class="site-header home-header">
       <a class="wordmark" href="./home.html" aria-label="REAL 홈페이지"><span class="brand-symbol" aria-hidden="true"></span>REAL</a>
-      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#patchnotes" data-board="patchnotes">패치노트</a><a href="#download">다운로드</a></nav>
+      <nav class="home-nav" aria-label="주요 메뉴"><a href="#notices" data-board="notices">공지사항</a><a href="#patchnotes" data-board="patchnotes">패치노트</a><a href="#download">다운로드</a><button id="chat-open" type="button" class="text-button" aria-controls="chat-panel" aria-expanded="false" disabled>채팅</button></nav>
       <div class="account-menu"><span id="account-name" class="account-name">회원</span><button id="logout-button" type="button" class="text-button">로그아웃<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 3H4v14h4m4-11 4 4-4 4m-5-4h9"/></svg></button></div>
     </header>
 
@@ -49,6 +49,10 @@
         <div><h2 id="admin-title">운영 관리</h2><p>새 계정의 가입 접수를 설정합니다.</p></div>
         <label class="registration-switch" for="registration-switch"><span>신규 가입 접수</span><input id="registration-switch" type="checkbox" role="switch" disabled><span class="switch-track" aria-hidden="true"></span><span id="registration-switch-label">닫힘</span></label>
         <p id="admin-feedback" class="admin-feedback" role="status" aria-live="polite" hidden></p>
+      </section>
+      <section id="chat-panel" class="chat-panel" aria-labelledby="chat-title" hidden>
+        <div class="chat-heading"><div><h2 id="chat-title">REAL 채팅</h2><p id="chat-nickname">캐릭터 닉네임으로 참여합니다.</p></div><button id="chat-close" type="button" class="icon-button" aria-label="채팅창 닫기">×</button></div>
+        <p id="chat-feedback" role="status" class="chat-feedback"></p><div id="chat-frame-wrap"></div>
       </section>
       <dialog id="post-editor" class="post-editor" aria-labelledby="post-editor-title">
         <div class="dialog-heading"><h2 id="post-editor-title">글 작성·수정</h2><button id="post-editor-close" type="button" class="icon-button" aria-label="편집창 닫기">×</button></div>

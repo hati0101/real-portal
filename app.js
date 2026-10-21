@@ -312,7 +312,29 @@
       content.hidden = false;
     }
 
+    const chatOpen=document.getElementById('chat-open'),chatPanel=document.getElementById('chat-panel'),chatWrap=document.getElementById('chat-frame-wrap'),chatFeedback=document.getElementById('chat-feedback');
+    let chatPayload=null,chatTimer=null,chatAttempt=0;
+    function closeChat(){chatAttempt++;chatPayload=null;clearInterval(chatTimer);chatTimer=null;chatWrap.replaceChildren();chatPanel.hidden=true;chatOpen.setAttribute('aria-expanded','false');}
+    document.getElementById('chat-close').addEventListener('click',()=>{closeChat();chatOpen.focus();});
+    chatPanel.addEventListener('keydown',event=>{if(event.key==='Escape'){closeChat();chatOpen.focus();}});
+    window.addEventListener('message',event=>{
+      const frame=chatWrap.querySelector('iframe');
+      if(event.origin==='null'&&event.source===frame?.contentWindow&&event.data?.type==='real-chat-ready'&&chatPayload)frame.contentWindow.postMessage({type:'real-chat-join',payload:chatPayload},'*');
+    });
+    chatOpen.addEventListener('click',async()=>{
+      if(!chatPanel.hidden){closeChat();return;}
+      const attempt=++chatAttempt;chatPanel.hidden=false;chatOpen.setAttribute('aria-expanded','true');chatFeedback.textContent='채팅에 연결하고 있습니다.';
+      document.getElementById('chat-close').focus();
+      try{
+        const data=await request('/api/chat');if(attempt!==chatAttempt)return;chatPayload=data;
+        document.getElementById('chat-nickname').textContent=data.nickname+' · 닉네임은 자동으로 설정됩니다.';
+        const frame=document.createElement('iframe');frame.title='REAL 회원 채팅';frame.setAttribute('sandbox','allow-scripts');frame.referrerPolicy='no-referrer';frame.src='./chat.html';chatWrap.replaceChildren(frame);chatFeedback.textContent='';
+        chatTimer=setInterval(async()=>{try{const session=await request('/api/session');if(session.authenticated!==true){closeChat();location.replace('./index.html');}}catch{closeChat();feedback(output,'로그인 상태를 확인하지 못해 채팅 연결을 닫았습니다.');}},60000);
+      }catch(error){if(attempt!==chatAttempt)return;chatFeedback.textContent=error.message;if(error.status===401){closeChat();location.replace('./index.html');}}
+    });
+
     async function loadPortal() {
+      closeChat();chatOpen.disabled=true;
       clearPortal();
       adminControls.hidden = true;
       registrationSwitch.disabled = true;
@@ -329,6 +351,7 @@
         isAdmin = session.user?.isAdmin === true;
         const portal = await request('/api/portal');
         renderPortal(portal);
+        chatOpen.disabled=false;
         apiStatus.hidden = true;
         isAdmin = session.user?.isAdmin === true;
         if (isAdmin) {
@@ -396,6 +419,7 @@
       if (event.persisted && apiBase) loadPortal();
     });
     window.addEventListener('pagehide', () => {
+      closeChat();
       clearPortal();
       adminControls.hidden = true;
     });
@@ -442,6 +466,7 @@
       feedback(output, '');
       try {
         await request('/api/logout', {});
+        closeChat();
         clearPortal();
         location.assign('./index.html');
       } catch (error) {
