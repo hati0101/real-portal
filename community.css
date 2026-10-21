@@ -71,3 +71,5 @@
 .forum-theme .is-trade .forum-list-heading>span:last-child{display:block}
 .forum-dialog #trade-kind{display:block;width:100%;margin-top:8px;padding:12px;border:1px solid var(--input-border);border-radius:5px;color:var(--text);background:var(--input);font:inherit}
 @media(max-width:720px){.forum-theme .is-trade .forum-list-heading,.trade-row{grid-template-columns:56px minmax(0,1fr) 76px;gap:10px}.trade-row{padding:13px 16px;font-size:13px}.trade-tag{padding:2px 5px}.trade-author{font-size:11px}.trade-actions{gap:8px}}
+
+.trade-actions{flex-wrap:wrap;column-gap:10px;row-gap:0}.trade-completed{color:var(--muted,#5e685b)}.trade-row.is-completed .trade-content{color:var(--muted,#5e685b)}
