@@ -116,6 +116,15 @@ h1, h2, h3, p { margin: 0; }
 .notice + .notice { margin-top: 36px; }
 .site-footer { display: flex; justify-content: space-between; gap: 20px; padding: 23px 0 27px; border-top: 1px solid #223b33; color: var(--quiet); font-size: 11px; }
 .site-footer > span:first-child { font-family: var(--font-family); font-weight: 700; letter-spacing: .12em; }
+.footer-links { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px 20px; }
+.footer-links a { color: var(--text); text-decoration: underline; text-underline-offset: 4px; padding: 8px 0; }
+.footer-links a:hover { color: var(--accent); }
+.terms-shell { width: min(900px, 100%); padding: 0 24px; margin: auto; }
+.terms-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+.terms-document { padding: 40px 0 56px; }
+.terms-document h1 { font-size: clamp(24px, 5vw, 34px); line-height: 1.4; }
+.terms-document h2 { margin: 32px 0 12px; font-size: 20px; }
+.terms-document p { line-height: 1.9; overflow-wrap: anywhere; color: var(--muted); }
 dialog { color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; width: min(530px, calc(100% - 32px)); max-height: calc(100svh - 40px); box-shadow: 0 24px 100px #0005; }
 dialog::backdrop { background: #020b09c4; }
 .dialog-heading { display: flex; align-items: start; justify-content: space-between; }
