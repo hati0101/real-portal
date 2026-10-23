@@ -81,3 +81,16 @@
 .rotation-sections{padding:0 24px 28px;display:grid;gap:24px}.rotation-section{border-top:1px solid var(--border);padding-top:20px}.rotation-section h3{font-size:22px;margin:0 0 8px}.rotation-section h4{margin:20px 0 8px}.rotation-section ul{margin:0;padding-left:22px;line-height:1.9}.rotation-section .form-note{margin:8px 0}.rotation-warning{color:var(--error)}#rotations-status{margin:0 24px 16px}@media(max-width:720px){.rotation-sections{padding:0 16px 20px}#rotations-status{margin:0 16px 16px}}
 
 .rotation-section ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}@media(max-width:720px){.rotation-section ul{grid-template-columns:1fr}}
+
+/* Keep badges intact and give mobile post titles their own full-width row. */
+.forum-row-title>.forum-tag,.forum-row-title>.forum-comment-count{flex-shrink:0;white-space:nowrap;overflow-wrap:normal}
+@media(max-width:720px){
+  .forum-theme #community-board:not(.is-trade) .forum-list-heading{display:none}
+  .forum-row{grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;padding:14px 16px}
+  .forum-row-title{grid-column:1/-1;align-items:flex-start;gap:6px;line-height:1.5}
+  .forum-row-title>span:not(.forum-tag):not(.forum-comment-count){min-width:0;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow-wrap:anywhere}
+  .forum-row-title>.forum-tag,.forum-row-title>.forum-comment-count{margin-top:3px}
+  .forum-author{grid-column:1;font-size:12px}
+  .forum-row .forum-date{display:block;grid-column:2;font-size:11px;white-space:nowrap}
+  .forum-theme .chat-restore{font-size:12px;min-height:44px;padding:10px 12px;bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+}
